@@ -1,0 +1,17 @@
+Package: clickstream
+Type: Package
+Title: Analyzes click streams based on Markov chains
+Version: 1.0
+Date: 2014-02-25
+Author: Michael Scholz
+Maintainer: Michael Scholz <michael.scholz@uni-passau.de>
+Description: This package allows modeling click streams with Markov chains. It supports to model click streams as zero-order, first-order or higher-order Markov chains. 
+License: GPL-2
+Depends: R (>= 3.0.1), methods
+Imports: igraph, plyr, reshape2, Rsolnp
+LazyLoad: yes
+ByteCompile: yes
+Packaged: 2014-02-28 08:15:34 UTC; Micha
+NeedsCompilation: no
+Repository: CRAN
+Date/Publication: 2014-02-28 10:29:21

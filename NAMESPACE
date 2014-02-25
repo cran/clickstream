@@ -1,0 +1,20 @@
+exportPattern("^[[:alpha:]]+")
+exportMethods(
+    "[",
+    "+",
+    "absorbingStates",
+    "initialize",
+    "plot",
+    "predict",
+    "print",
+    "randomClicks",
+    "show",
+    "states",
+    "summary",
+    "transientStates" 
+)
+exportClasses(
+    "MarkovChain",
+     "Pattern" 
+)
+import(methods, igraph, plyr, reshape2, Rsolnp)
