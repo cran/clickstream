@@ -19,6 +19,7 @@ Objects can be created by calls of the form \code{new("Pattern", sequence, proba
   \describe{
     \item{\code{sequence}:}{Sequence of clicks}
     \item{\code{probability}:}{(Optional) Probability of occurrence}
+    \item{\code{absorbingProbabilities}:}{(Optional) Probability of absorbing in any of the absorbing states}
   }
 }
 \section{Methods}{
@@ -30,7 +31,7 @@ Objects can be created by calls of the form \code{new("Pattern", sequence, proba
 	 }
 }
 \author{
-Michael Scholz
+Michael Scholz \email{michael.scholz@uni-passau.de}
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -45,5 +46,7 @@ showClass("Pattern")
 # create simple Pattern objects
 pattern1<-new("Pattern", sequence=c("h", "c", "p"))
 pattern2<-new("Pattern", sequence=c("c", "p", "p"), probability=0.2)
+pattern3<-new("Pattern", sequence=c("h", "p", "p"), probability=0.35, 
+        absorbingProbabilities=data.frame(d=0.6, o=0.4))
 }
 \keyword{classes}

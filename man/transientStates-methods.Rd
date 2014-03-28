@@ -13,4 +13,7 @@ Returns the names of all states that have a non-zero probability that a user wil
 %%  ~~describe this method here~~
 }
 }}
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}
 \keyword{methods}

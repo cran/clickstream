@@ -19,8 +19,7 @@ Objects can be created by calls of the form \code{new("MarkovChain", ...)}.
     \item{\code{states}:}{Names of the states}
     \item{\code{order}:}{Order of the Markov chain}
     \item{\code{transitions}:}{List of transition probability matrices}
-    \item{\code{lambda}:}{Lag variables}
-    \item{\code{w}:}{Optimization parameter (see \code{\link{fitMarkovChain}})}
+    \item{\code{lambda}:}{Lag variables}    
     \item{\code{logLikelihood}:}{LogLikelihood of the fitted Markov chain}
     \item{\code{observations}:}{Number of observations from which the Markov chain has been fitted}
     \item{\code{start}:}{Start probabilities}
@@ -45,7 +44,7 @@ Objects can be created by calls of the form \code{new("MarkovChain", ...)}.
 }
 
 \author{
-Michael Scholz
+Michael Scholz \email{michael.scholz@uni-passau.de}
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

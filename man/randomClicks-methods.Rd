@@ -25,6 +25,9 @@ The first clicks of a user as \code{Pattern} object. A \code{Pattern} object wit
 (Optional) The number of clicks that should be generated (default is 1).
 }
 }
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}
 \seealso{
 \code{\link{fitMarkovChain}}
 }

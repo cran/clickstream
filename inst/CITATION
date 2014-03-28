@@ -1,0 +1,11 @@
+citHeader("To cite package clickstream in publications use:")
+
+citEntry(entry="Manual",
+         title = "clickstream: an R package for analyzing clickstreams",
+         author = person(first="Michael", last="Scholz"),
+         month="03",
+         year="2014",
+         note="R package version 1.1.0",
+         textVersion = "Michael Scholz. 
+    	 clickstream: an R package for analyzing clickstreams"
+         )

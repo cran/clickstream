@@ -4,7 +4,7 @@
 \alias{absorbingStates,MarkovChain-method}
 \title{Returns all absorbing states}
 \description{
-Returns the names of all states that never have a successor in a click stream (i.e. that are absorbing).
+Returns the names of all states that never have a successor in a clickstream (i.e. that are absorbing).
 }
 \section{Methods}{
 \describe{
@@ -13,4 +13,7 @@ Returns the names of all states that never have a successor in a click stream (i
 %%  ~~describe this method here~~
 }
 }}
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}
 \keyword{methods}

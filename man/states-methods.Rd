@@ -13,4 +13,7 @@ Returns the name of all states of a \code{MarkovChain} object.
 %%  ~~describe this method here~~
 }
 }}
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}
 \keyword{methods}

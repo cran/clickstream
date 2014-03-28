@@ -22,9 +22,8 @@ Prints the summary of a \code{MarkovChain} object.
 }
 
 \author{
-Michael Scholz
+Michael Scholz \email{michael.scholz@uni-passau.de}
 }
-
 
 \seealso{
 \code{\link[=MarkovChain-class]{summary}}

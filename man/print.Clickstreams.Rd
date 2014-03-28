@@ -2,10 +2,10 @@
 \alias{print.Clickstreams}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Prints a list of click streams
+Prints a list of clickstreams
 }
 \description{
-Prints a list of click streams. 
+Prints a list of clickstreams. 
 }
 \usage{
 \method{print}{Clickstreams}(x, ...)
@@ -13,7 +13,7 @@ Prints a list of click streams.
 %- maybe also 'usage' for other objects documented here.
 \arguments{
     \item{x}{
-        A list of click streams.
+        A list of clickstreams.
     }
     
     \item{...}{
@@ -22,9 +22,8 @@ Prints a list of click streams.
 }
 
 \author{
-Michael Scholz
+Michael Scholz \email{michael.scholz@uni-passau.de}
 }
-
 
 \seealso{
 \code{\link{readClickstreams}}, \code{\link{randomClickstreams}}

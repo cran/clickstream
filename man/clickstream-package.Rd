@@ -2,16 +2,16 @@
 \alias{clickstream-package}
 \alias{clickstream}
 \docType{package}
-\title{Analyzes click streams based on Markov chains
+\title{Analyzes clickstreams based on Markov chains
 }
 \description{
-This package allows modeling click streams with Markov chains. It supports to model click streams as zero-order, first-order or higher-order Markov chains. 
+This package allows modeling clickstreams with Markov chains. It supports to model clickstreams as zero-order, first-order or higher-order Markov chains. 
 }
 \details{
 \tabular{ll}{
 Package: \tab clickstream\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
+Version: \tab 1.1.0\cr
 Date: \tab 2014-02-25\cr
 License: \tab GPL-2\cr
 Depends: \tab R (>= 3.0), methods\cr
@@ -19,13 +19,10 @@ Depends: \tab R (>= 3.0), methods\cr
 
 }
 \author{
-Michael Scholz
-
-Maintainer: Michael Scholz <michael.scholz@uni-passau.de>
-
+Michael Scholz \email{michael.scholz@uni-passau.de}
 }
 \references{
-For modeling click streams with Markov chains, see Ching, W.-K. et al.: \emph{Markov Chains -- Models, Algorithms and Applications}, 2nd edition, Springer, 2013.
+For modeling clickstreams with Markov chains, see Ching, W.-K. et al.: \emph{Markov Chains -- Models, Algorithms and Applications}, 2nd edition, Springer, 2013.
 }
 
 \keyword{ click stream }

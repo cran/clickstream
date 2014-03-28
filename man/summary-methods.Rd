@@ -23,4 +23,7 @@ Returns a \code{MarkovChainSummary} object.
 \item{\code{aic}}{Akaike's Information Criterion for the \code{MarkovChain} object}
 \item{\code{bic}}{Bayesian Information Criterion for the \code{MarkovChain} object}
 }
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}
 \keyword{methods}

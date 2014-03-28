@@ -1,0 +1,11 @@
+27-03-2014
+Version 1.1.0
+Fixed
+- Wrong line breaks in readClickstreams.
+- Wrong direction in MarkovChain plots.
+- Wrong edge titles in MarkovChain plots.
+New
+- Function for clustering lists of clickstreams.
+- Functions for printing and summarizing clickstream clusters.
+- Function for writing a clickstream list to file.
+- Possibility to use absorbing probabilities for predicting next states.

@@ -2,10 +2,10 @@
 \alias{randomClickstreams}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Generates a list of click streams
+Generates a list of clickstreams
 }
 \description{
-Generates a list of click streams by randomly walking through a given transition matrix.
+Generates a list of clickstreams by randomly walking through a given transition matrix.
 }
 \usage{
 randomClickstreams(states, startProbabilities, transitionMatrix, meanLength, n = 100)
@@ -29,10 +29,10 @@ Number of click streams to be generated.
 }
 }
 \value{
-Returns a list of click streams.
+Returns a list of clickstreams.
 }
 \author{
-Michael Scholz
+Michael Scholz \email{michael.scholz@uni-passau.de}
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

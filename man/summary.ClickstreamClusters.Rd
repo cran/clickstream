@@ -1,19 +1,19 @@
-\name{summary.Clickstreams}
-\alias{summary.Clickstreams}
+\name{summary.ClickstreamClusters}
+\alias{summary.ClickstreamClusters}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Prints a summary of a list of clickstreams
+Prints a summary of a ClickstreamCluster object
 }
 \description{
-Returns a summary of a list of clickstreams.
+Prints a summary of a \code{ClickstreamCluster} object. A \code{ClickstreamClusters} object represents the result of a cluster analysis on a list of clickstreams (see \code{\link{clusterClickstreams}}).
 }
 \usage{
-\method{summary}{Clickstreams}(object, ...)
+\method{summary}{ClickstreamClusters}(object, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
     \item{object}{
-        A list of clickstreams.
+        A \code{ClickstreamClusters} object returned by \code{\link{clusterClickstreams}}.
     }
     
     \item{...}{
@@ -28,7 +28,7 @@ Michael Scholz \email{michael.scholz@uni-passau.de}
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{readClickstreams}}, \code{\link{randomClickstreams}}
+\code{\link{clusterClickstreams}}, \code{\link{print.ClickstreamClusters}}
 }
 \examples{
 clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
@@ -40,5 +40,6 @@ clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
 csf<-tempfile()
 writeLines(clickstreams, csf)
 cls<-readClickstreams(csf, header=TRUE)
-summary(cls)
+clusters<-clusterClickstreams(cls, order=0, centers=2)
+summary(clusters)
 }

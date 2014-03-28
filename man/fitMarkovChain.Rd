@@ -2,17 +2,15 @@
 \alias{fitMarkovChain}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Fits a list of click streams to a Markov chain
+Fits a list of clickstreams to a Markov chain
 }
 \description{
-This function fits a list of click streams to a Markov chain. Zero-order, first-order as well as higher-order Markov chains are supported. For estimating higher-order Markov chains this function solves the following linear programming problem:\cr
-\deqn{\min w}{min w}
+This function fits a list of clickstreams to a Markov chain. Zero-order, first-order as well as higher-order Markov chains are supported. For estimating higher-order Markov chains this function solves the following quadratic programming problem:\cr
+\deqn{\min ||\sum_{i=1}^k X-\lambda_i Q_iX||}{min ||\sum X-\lambda_i Q_iX||}
 \deqn{\mathrm{s.t.}}{s.t.}
-\deqn{w \ge X-[QX]\lambda}{w \ge X-[QX]\lambda}
-\deqn{w \ge -X+[QX]\lambda}{w \ge -X+[QX]\lambda}
-\deqn{w \ge 0}{w \ge 0}
 \deqn{\sum_{i=1}^k \lambda_i = 1}{sum \lambda_i = 1}
 \deqn{\lambda_i \ge 0}{\lambda_i \ge 0}
+The distribution of states is given as \eqn{X}. \eqn{\lambda_i} is the lag parameter for lag \eqn{i} and \eqn{Q_i} the transition matrix.
 }
 \usage{
 fitMarkovChain(clickstreamList, order = 1)
@@ -20,14 +18,14 @@ fitMarkovChain(clickstreamList, order = 1)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{clickstreamList}{
-A list of click streams for which a Markov chain is fitted.
+A list of clickstreams for which a Markov chain is fitted.
 }
   \item{order}{
-(Optional) The order of the Markov chain that is fitted from the click streams. Per default, Markov chains with \code{order=1} are fitted. It is also possible to fit zero-order Markov chains (\code{order=0}) and higher-order Markov chains. 
+(Optional) The order of the Markov chain that is fitted from the clickstreams. Per default, Markov chains with \code{order=1} are fitted. It is also possible to fit zero-order Markov chains (\code{order=0}) and higher-order Markov chains. 
 }
 }
 \details{
-For solving the linear programming problem of higher-order Markov chains, an augmented Lagrange multiplier method from the package \code{\link{Rsolnp}} is used.
+For solving the quadratic programming problem of higher-order Markov chains, an augmented Lagrange multiplier method from the package \code{\link{Rsolnp}} is used.
 }
 \value{
 Returns a \code{MarkovChain} object.
@@ -36,10 +34,10 @@ Returns a \code{MarkovChain} object.
 This method implements the parameter estimation method presented in Ching, W.-K. et al.: \emph{Markov Chains -- Models, Algorithms and Applications}, 2nd edition, Springer, 2013.
 }
 \author{
-Michael Scholz
+Michael Scholz \email{michael.scholz@uni-passau.de}
 }
 \note{
-At least half of the click streams need to consist of as many clicks as the order of the Markov chain that should be fitted.
+At least half of the clickstreams need to consist of as many clicks as the order of the Markov chain that should be fitted.
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

@@ -1,31 +1,34 @@
-\name{readClickstreams}
-\alias{readClickstreams}
+\name{writeClickstreams}
+\alias{writeClickstreams}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Reads a list of clickstreams from a file
+Writes a list of clickstreams to a file
 }
 \description{
-Reads a list of clickstream from a csv-file.
+Writes a list of clickstream to a csv-file.
 }
 \usage{
-readClickstreams(file, sep = ",", header = FALSE)
+writeClickstreams(clickstreamList, file, header=TRUE, sep=",", quote=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+  \item{clickstreamList}{
+The list of clickstreams to be written.
+  }
   \item{file}{
-The name of the file which the clickstreams are to be read from. Each line of the file appears as one click stream. If it does not contain an absolute path, the file name is relative to the current working directory, \code{\link{getwd}}.
+The name of the file which the clickstreams are written to.
 }
   \item{sep}{
 The character used to separate clicks (default is \dQuote{,}).
 }
   \item{header}{
-A logical flag indicating whether the first entry of each line in the file is the name of the clickstream user.
+A logical flag indicating whether the name of each clickstream element should be used as first element.
 }
+  \item{quote}{
+A logical flag indicating whether each element of a clickstream will be surrounded by double quotes (default is \code{TRUE}.
+  }
 }
 
-\value{
-A list of clickstreams. Each element is a vector of characters representing the clicks. The name of each list element is either the header of a clickstream file or a unique number.
-}
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}
 }
@@ -33,7 +36,7 @@ Michael Scholz \email{michael.scholz@uni-passau.de}
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{print.Clickstreams}}, \code{\link{randomClickstreams}}
+\code{\link{readClickstreams}}, \code{\link{clusterClickstreams}}
 }
 \examples{
 clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
@@ -45,5 +48,6 @@ clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
 csf<-tempfile()
 writeLines(clickstreams, csf)
 cls<-readClickstreams(csf, header=TRUE)
-print(cls)
+clusters<-clusterClickstreams(cls, order=0, centers=2)
+writeClickstreams(cls, file="clickstreams.csv", header=TRUE, sep=",")
 }
