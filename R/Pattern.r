@@ -1,3 +1,30 @@
+#' Class \code{"Pattern"}
+#' 
+#' This S4 class describes a click pattern consisting of a sequence of clicks
+#' and a probability of occurrence.
+#' 
+#' 
+#' @name Pattern-class
+#' @aliases Pattern-class [,Pattern-method +,Pattern,Pattern-method
+#' initialize,Pattern-method show,Pattern-method
+#' @docType class
+#' @section Objects from the Class: Objects can be created by calls of the form
+#' \code{new("Pattern", sequence, probability, ...)}. This S4 class describes a click pattern consisting of a sequence of clicks
+#' and a probability of occurrence.
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link[=MarkovChain-class]{randomClicks}}
+#' @keywords classes
+#' @examples
+#' 
+#' # show Pattern definition
+#' showClass("Pattern")
+#' 
+#' # create simple Pattern objects
+#' pattern1<-new("Pattern", sequence=c("h", "c", "p"))
+#' pattern2<-new("Pattern", sequence=c("c", "p", "p"), probability=0.2)
+#' pattern3<-new("Pattern", sequence=c("h", "p", "p"), probability=0.35, 
+#'         absorbingProbabilities=data.frame(d=0.6, o=0.4))
+#' 
 setClass("Pattern", 
          representation(sequence="character", 
                         probability="numeric",

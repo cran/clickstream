@@ -59,12 +59,14 @@
         transition=transition[,-1]
         transition=transition[,-dim(transition)[2]]  
         pos1=which(names(transition)=="[[-]]")
-        pos2=which(row.names(transition)=="[[-]]")       
-        transition=transition[-pos2,-pos1, drop=F]
-        sums=aaply(.data=t(transition), .margins=2, .fun=sum)
-        sums=ifelse(sums==0, 1, sums)
-        transition=t(transition/sums)
-        template[dimnames(transition)[[1]], dimnames(transition)[[2]]]=transition
+        pos2=which(row.names(transition)=="[[-]]") 
+        if (length(pos1)>0 && length(pos2)>0) {
+            transition=transition[-pos2,-pos1, drop=F]
+            sums=aaply(.data=t(transition), .margins=2, .fun=sum)
+            sums=ifelse(sums==0, 1, sums)
+            transition=t(transition/sums)
+            template[dimnames(transition)[[1]], dimnames(transition)[[2]]]=transition
+        } 
     }
     return(as.vector(template))
 }
@@ -78,6 +80,50 @@
     return(transition)
 }
 
+
+
+
+
+#' Perform k-means clustering on a list of clickstreams
+#' 
+#' Perform k-means clustering on a list of clickstreams. For each clickstream a
+#' transition matrix of a given order is computed. These transition matrices
+#' are used as input for performing k-means clustering.
+#' 
+#' 
+#' @param clickstreamList A list of clickstreams for which the cluster analysis
+#' is performed.
+#' @param order The order of the transition matrices used as input for
+#' clustering (default is 0).
+#' @param centers The number of clusters.
+#' @param ...  Additional parameters for k-means clustering (see
+#' \code{\link{kmeans}}).
+#' @return This method returns a \code{ClickstreamClusters} object (S3-class).
+#' It is a list with the following components: \item{clusters}{ A list of
+#' \code{Clickstream} objects representing the resulting clusters.  }
+#' \item{centers}{ A matrix of cluster centres.  } \item{states}{ Vector of states} 
+#' \item{totss}{ The total sum of squares.  } \item{withinss}{ Vector of within-cluster 
+#' sum of squares, one component per cluster.  } \item{tot.withinss}{ Total within-cluster sum of
+#' squares, i.e., \code{sum(withinss)}.  } \item{betweenss}{ The
+#' between-cluster sum of squares, i.e., \code{totss - tot.withinss}.  }
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link{print.ClickstreamClusters}},
+#' \code{\link{summary.ClickstreamClusters}}
+#' @examples
+#' 
+#' clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#'                "User2,i,c,i,c,c,c,d",
+#'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
+#'                "User4,c,c,p,c,d",
+#'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
+#'                "User6,i,h,c,c,p,p,c,p,c,d")
+#' csf<-tempfile()
+#' writeLines(clickstreams, csf)
+#' cls<-readClickstreams(csf, header=TRUE)
+#' clusters<-clusterClickstreams(cls, order=0, centers=2)
+#' print(clusters)
+#' 
+#' @export clusterClickstreams
 clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
     states=unique(as.character(unlist(clickstreamList)))
     if (order==0) {
@@ -92,7 +138,7 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
         clusterList[[i]]=clickstreamList[which(fit$cluster==i)]
         class(clusterList[[i]])="Clickstreams"        
     }
-    clusters=list(clusters=clusterList, centers=fit$centers, totss=fit$totss,
+    clusters=list(clusters=clusterList, centers=fit$centers, states=states, totss=fit$totss,
                   withinss=fit$withinss, tot.withinss=fit$tot.withinss, betweenss=fit$betweenss)
     class(clusters)="ClickstreamClusters"
     return(clusters)
@@ -119,30 +165,6 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
     return(list(ll=ll, transition=transition))
 }
 
-# .constr1=function(params) { 
-#     Q=get("Q")
-#     X=get("X")    
-#     w=params[1]
-#     lambda=params[2:(length(Q)+1)]
-#     QX=0
-#     for (i in 1:length(Q)) {
-#         QX=QX+lambda[i]*Q[[i]]
-#     }
-#     c1=X-QX-w
-#     c2=-X+QX-w
-#     return(c(c1, c2))
-# }
-# 
-# .constr2=function(params) {
-#     Q=get("Q")
-#     lambda=params[2:(length(Q)+1)]
-#     return(sum(lambda))
-# }
-# 
-# .obj=function(params) {
-#     return(params[1])
-# }
-
 .foo=function(params) {
     QX=get("QX")
     X=get("X")    
@@ -157,9 +179,58 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
     return(sum(params))
 }
 
+
+
+
+
+#' Fits a list of clickstreams to a Markov chain
+#' 
+#' This function fits a list of clickstreams to a Markov chain. Zero-order,
+#' first-order as well as higher-order Markov chains are supported. For
+#' estimating higher-order Markov chains this function solves the following
+#' quadratic programming problem:\cr \deqn{\min ||\sum_{i=1}^k X-\lambda_i
+#' Q_iX||}{min ||\sum X-\lambda_i Q_iX||} \deqn{\mathrm{s.t.}}{s.t.}
+#' \deqn{\sum_{i=1}^k \lambda_i = 1}{sum \lambda_i = 1} \deqn{\lambda_i \ge
+#' 0}{\lambda_i \ge 0} The distribution of states is given as \eqn{X}.
+#' \eqn{\lambda_i} is the lag parameter for lag \eqn{i} and \eqn{Q_i} the
+#' transition matrix.
+#' 
+#' For solving the quadratic programming problem of higher-order Markov chains,
+#' an augmented Lagrange multiplier method from the package
+#' \code{\link{Rsolnp}} is used.
+#' 
+#' @param clickstreamList A list of clickstreams for which a Markov chain is
+#' fitted.
+#' @param order (Optional) The order of the Markov chain that is fitted from
+#' the clickstreams. Per default, Markov chains with \code{order=1} are fitted.
+#' It is also possible to fit zero-order Markov chains (\code{order=0}) and
+#' higher-order Markov chains.
+#' @return Returns a \code{MarkovChain} object.
+#' @note At least half of the clickstreams need to consist of as many clicks as
+#' the order of the Markov chain that should be fitted.
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link[=MarkovChain-class]{MarkovChain}},
+#' \code{\link[=Rsolnp]{Rsolnp}}
+#' @references This method implements the parameter estimation method presented
+#' in Ching, W.-K. et al.: \emph{Markov Chains -- Models, Algorithms and
+#' Applications}, 2nd edition, Springer, 2013.
+#' @examples
+#' 
+#' # fitting a simple Markov chain
+#' clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#'                "User2,i,c,i,c,c,c,d",
+#'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
+#'                "User4,c,c,p,c,d",
+#'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
+#'                "User6,i,h,c,c,p,p,c,p,c,d")
+#' csf<-tempfile()
+#' writeLines(clickstreams, csf)
+#' cls<-readClickstreams(csf, header=TRUE)
+#' mc<-fitMarkovChain(cls)
+#' print(mc)
+#' 
+#' @export fitMarkovChain
 fitMarkovChain=function(clickstreamList, order=1) {  
-    #environment(.constr1)=environment()
-    #environment(.constr2)=environment()
     n=length(unlist(clickstreamList))
     lens=laply(.data=clickstreamList, .fun=function(X) length(X))
     ratio=length(lens[lens>order])/length(lens)
@@ -193,14 +264,7 @@ fitMarkovChain=function(clickstreamList, order=1) {
         Q=alply(.data=seq(1,order,1), .margins=1, .fun=.getQ, clickstreamList)
         transitions=llply(.data=Q, .fun=function(q) q$transition)
         ll=laply(.data=Q, .fun=function(q) q$ll)
-        QX=llply(.data=transitions, .fun=function(tr) as.matrix(tr)%*%X)
-        #params=c(1, rep(1/order, order))
-        #model=solnp(pars=params, fun=.obj, eqfun=.constr2, eqB=1, ineqfun=.constr1,
-        #            ineqLB=rep(-Inf, length(states)*2), ineqUB=rep(0, length(states)*2),
-        #            LB=rep(0, (order+1)), UB=c(Inf, rep(1, order)),
-        #            control=list(trace=0))
-        #w=model$par[1]
-        #lambda=model$par[2:(order+1)]  
+        QX=llply(.data=transitions, .fun=function(tr) as.matrix(tr)%*%X) 
         environment(.foo)=environment()
         params=rep(1/order, order)
         model=solnp(pars=params, fun=.foo, eqfun=.constr, eqB=1, LB=rep(0, order), control=list(trace=0))

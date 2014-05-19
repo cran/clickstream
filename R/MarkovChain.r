@@ -1,3 +1,32 @@
+#' Class \code{"MarkovChain"}
+#' 
+#' @name MarkovChain-class
+#' @aliases MarkovChain-class plot,MarkovChain-method print,MarkovChain-method
+#' show,MarkovChain-method
+#' @docType class
+#' @section Objects from the Class: Objects can be created by calls of the form
+#' \code{new("MarkovChain", ...)}. This S4 class describes \code{MarkovChain} objects.
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link{fitMarkovChain}}
+#' @keywords classes
+#' @examples
+#' 
+#' # show MarkovChain definition
+#' showClass("MarkovChain")
+#' 
+#' # fit a simple Markov chain from a list of click streams
+#' clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#'                "User2,i,c,i,c,c,c,d",
+#'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
+#'                "User4,c,c,p,c,d",
+#'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
+#'                "User6,i,h,c,c,p,p,c,p,c,d")
+#' csf<-tempfile()
+#' writeLines(clickstreams, csf)
+#' cls<-readClickstreams(csf, header=TRUE)
+#' mc<-fitMarkovChain(cls)
+#' print(mc)
+#' 
 setClass("MarkovChain", 
          representation(states="character",
                         order="numeric",
@@ -12,6 +41,18 @@ setClass("MarkovChain",
                         absorbingProbabilities="data.frame")
 )         
 
+#' Returns all states
+#' 
+#' @name states-methods
+#' @aliases states states,MarkovChain-method
+#' @docType methods
+#' @method states
+#' @param object An instance of the \code{MarkovChain}-class
+#' @section Methods: \describe{
+#' 
+#' \item{list("signature(object = \"MarkovChain\")")}{ Returns the name of all states of a \code{MarkovChain} object. } }
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @keywords methods
 setGeneric("states", function(object) standardGeneric("states"))
 setMethod("states", "MarkovChain", 
           function(object) {
@@ -19,6 +60,19 @@ setMethod("states", "MarkovChain",
           }
 )
 
+#' Returns all absorbing states
+#' 
+#' @name absorbingStates-methods
+#' @aliases absorbingStates absorbingStates,MarkovChain-method
+#' @docType methods
+#' @section Methods: \describe{
+#' 
+#' \item{list("signature(object = \"MarkovChain\")")}{ Returns the names of all states that never have a successor 
+#' in a clickstream (i.e. that are absorbing).} }
+#' @method absorbingStates
+#' @param object An instance of the \code{MarkovChain}-class
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @keywords methods
 setGeneric("absorbingStates", function(object) standardGeneric("absorbingStates"))
 setMethod("absorbingStates", "MarkovChain", 
           function(object) {
@@ -26,6 +80,19 @@ setMethod("absorbingStates", "MarkovChain",
           }
 )
 
+#' Returns all transient states
+#' 
+#' @name transientStates-methods
+#' @aliases transientStates transientStates,MarkovChain-method
+#' @docType methods
+#' @method transientStates
+#' @param object An instance of the \code{MarkovChain}-class
+#' @section Methods: \describe{
+#' 
+#' \item{list("signature(object = \"MarkovChain\")")}{ Returns the names of all states that have a non-zero 
+#' probability that a user will never return to them (i.e. that are transient). } }
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @keywords methods
 setGeneric("transientStates", function(object) standardGeneric("transientStates"))
 setMethod("transientStates", "MarkovChain", 
           function(object) {
@@ -33,6 +100,57 @@ setMethod("transientStates", "MarkovChain",
           }
 )
 
+#' Predicts the next click(s) of a user
+#' 
+#' @name predict-methods
+#' @aliases predict,MarkovChain-method
+#' @docType methods
+#' @method predict
+#' @param object A \code{MarkovChain} object used for predicting the next
+#' click(s)
+#' @param startPattern The first clicks of a user as \code{Pattern} object. A
+#' \code{Pattern} object with an empty sequence is also possible.
+#' @param dist (Optional) The number of clicks that should be predicted
+#' (default is 1).
+#' @param ties (Optional) The strategy for handling ties in predicting the next
+#' click. Possible strategies are \code{random} (default) and \code{first}.
+#' @section Methods: \describe{
+#' 
+#' \item{list("signature(object = \"MarkovChain\")")}{ This method predicts the next click(s) of a user. 
+#' The first clicks of a user
+#' are given as \code{Pattern} object. The next click(s) are predicted based on
+#' the transition probabilities in the \code{MarkovChain} object. The
+#' probability distribution of the next click (n) is estimated as follows:\cr
+#' \deqn{X^{(n)}=B \cdot \sum_{i=1}^k \lambda_iQ_iX^{(n-i)}}{X^n=B * sum
+#' \lambda_i Q_iX^{n-i}} The distribution of states at time \eqn{n} is given as
+#' \eqn{X^n}. The transition matrix for lag \eqn{i} is given as \eqn{Q_i}.
+#' \eqn{\lambda_i} specifies the lag parameter and \eqn{B} the absorbing
+#' probability matrix. } }
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link{fitMarkovChain}}
+#' @keywords methods
+#' @examples
+#' 
+#' # fitting a simple Markov chain and predicting the next click
+#' clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#'                "User2,i,c,i,c,c,c,d",
+#'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
+#'                "User4,c,c,p,c,d",
+#'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
+#'                "User6,i,h,c,c,p,p,c,p,c,d")
+#' csf<-tempfile()
+#' writeLines(clickstreams, csf)
+#' cls<-readClickstreams(csf, header=TRUE)
+#' mc<-fitMarkovChain(cls)
+#' startPattern<-new("Pattern", sequence=c("h", "c"))
+#' predict(mc, startPattern)
+#' #
+#' # predict with predefined absorbing probabilities
+#' #
+#' startPattern<-new("Pattern", sequence=c("h", "c"), 
+#'         absorbingProbabilities=data.frame(d=0.2, o=0.8))
+#' predict(mc, startPattern)
+#' 
 setMethod("predict", "MarkovChain",
           function(object, startPattern, dist=1, ties="random") {  
               absorbingProbabilities=data.matrix(startPattern@absorbingProbabilities)
@@ -132,6 +250,41 @@ setMethod("plot", "MarkovChain",
           }
 )
 
+#' Generates a sequence of clicks
+#' 
+#' @name randomClicks-methods
+#' @aliases randomClicks randomClicks,MarkovChain-method
+#' @docType methods
+#' @method randomClicks
+#' @param object A \code{MarkovChain} object used for generating the next
+#' click(s)
+#' @param startPattern The first clicks of a user as \code{Pattern} object. A
+#' \code{Pattern} object with an empty sequence is also possible.
+#' @param dist (Optional) The number of clicks that should be generated
+#' (default is 1).
+#' @section Methods: \describe{
+#' 
+#' \item{list("signature(object = \"MarkovChain\")")}{ Generates a sequence of clicks by randomly walking through 
+#' the transition graph of a given \code{MarkovChain} object. } }
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link{fitMarkovChain}}
+#' @keywords methods
+#' @examples
+#' 
+#' # fitting a simple Markov chain and predicting the next click
+#' clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#'                "User2,i,c,i,c,c,c,d",
+#'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
+#'                "User4,c,c,p,c,d",
+#'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
+#'                "User6,i,h,c,c,p,p,c,p,c,d")
+#' csf<-tempfile()
+#' writeLines(clickstreams, csf)
+#' cls<-readClickstreams(csf, header=TRUE)
+#' mc<-fitMarkovChain(cls)
+#' startPattern<-new("Pattern", sequence=c("h", "c"))
+#' predict(mc, startPattern)
+#' 
 setGeneric("randomClicks", function(object, startPattern, dist) standardGeneric("randomClicks"))
 setMethod("randomClicks", "MarkovChain",
           function(object, startPattern, dist=1) {      
@@ -235,6 +388,27 @@ setMethod("print", "MarkovChain", function(x) {
 }
 )
 
+#' Prints a summary of a MarkovChain object
+#' 
+#' @name summary-methods
+#' @aliases summary-methods summary,MarkovChain-method
+#' @docType methods
+#' @method summary
+#' @param object An instance of the \code{MarkovChain}-class
+#' @return Returns a \code{MarkovChainSummary} object.
+#' 
+#' \item{list("desc")}{A short description of the \code{MarkovChain} object.}
+#' \item{list("observations")}{The number of observations from which the
+#' \code{MarkovChain} object has been fitted.} \item{list("k")}{The number of
+#' estimation parameters.} \item{list("logLikelihood")}{The LogLikelihood of
+#' the \code{MarkovChain} object.} \item{list("aic")}{Akaike's Information
+#' Criterion for the \code{MarkovChain} object} \item{list("bic")}{Bayesian
+#' Information Criterion for the \code{MarkovChain} object}
+#' @section Methods: \describe{
+#' 
+#' \item{list("signature(object = \"MarkovChain\")")}{ Generates a summary for a given \code{MarkovChain} object } }
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @keywords methods
 setMethod("summary", "MarkovChain",
           function(object) {
               if (object@order==0) {
@@ -262,6 +436,36 @@ setMethod("summary", "MarkovChain",
 )
 
 
+
+
+
+
+#' Prints the summary of a \code{MarkovChain} object
+#' 
+#' Prints the summary of a \code{MarkovChain} object.
+#' 
+#' 
+#' @param x A \code{MarkovChainSummary} object generated with
+#' \code{\link[=MarkovChain-class]{summary}}
+#' @param ...  Ignored parameters.
+#' @method print MarkovChainSummary
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link[=MarkovChain-class]{summary}}
+#' @examples
+#' 
+#' clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#'                "User2,i,c,i,c,c,c,d",
+#'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
+#'                "User4,c,c,p,c,d",
+#'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
+#'                "User6,i,h,c,c,p,p,c,p,c,d")
+#' csf<-tempfile()
+#' writeLines(clickstreams, csf)
+#' cls<-readClickstreams(csf, header=TRUE)
+#' mc<-fitMarkovChain(cls)
+#' print(summary(mc))
+#' 
+#' @export print.MarkovChainSummary
 print.MarkovChainSummary=function(x, ...) {
     cat(x$desc, "\n\n", sep="")
     cat("Observations: ", x$observations, "\n", sep="")
