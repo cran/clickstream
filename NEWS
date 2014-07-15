@@ -1,3 +1,10 @@
+15-07-2014
+Version 1.1.2
+Fixed
+- Deleted print-method for S4 classes
+New
+- Added the possibility to define the number of digits in a Markov-chain-plot
+
 19-05-2014
 Version 1.1.1
 Fixed

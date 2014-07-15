@@ -54,7 +54,7 @@ csf<-tempfile()
 writeLines(clickstreams, csf)
 cls<-readClickstreams(csf, header=TRUE)
 mc<-fitMarkovChain(cls)
-print(mc)
+show(mc)
 }
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}

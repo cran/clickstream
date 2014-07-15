@@ -1,7 +1,7 @@
 #' Class \code{"MarkovChain"}
 #' 
 #' @name MarkovChain-class
-#' @aliases MarkovChain-class plot,MarkovChain-method print,MarkovChain-method
+#' @aliases MarkovChain-class plot,MarkovChain-method
 #' show,MarkovChain-method
 #' @docType class
 #' @section Objects from the Class: Objects can be created by calls of the form
@@ -25,7 +25,7 @@
 #' writeLines(clickstreams, csf)
 #' cls<-readClickstreams(csf, header=TRUE)
 #' mc<-fitMarkovChain(cls)
-#' print(mc)
+#' show(mc)
 #' 
 setClass("MarkovChain", 
          representation(states="character",
@@ -237,14 +237,14 @@ setMethod("predict", "MarkovChain",
 )
 
 setMethod("plot", "MarkovChain",
-          function(x, order=1, ...) {
+          function(x, order=1, digits=2, ...) {
               if (x@order==0) {
                   plot(x@transitions[[1]]$states, x@transitions[[1]]$probability) 
               } else if (order>x@order) {
                   stop("Plotting order is higher than the order of the markov chain.")                                 
               } else {
                   graph=graph.adjacency(t(as.matrix(x@transitions[[order]])), weighted=T)
-                  edgeLabels=E(graph)$weight
+                  edgeLabels=round(E(graph)$weight, digits)
                   plot(graph, edge.label=edgeLabels, ...)    
               }
           }
@@ -358,35 +358,6 @@ setMethod("show", "MarkovChain", function(object) {
 }
 )
 
-setMethod("print", "MarkovChain", function(x) {
-    if (x@order==0) {
-        cat("Zero-Order Markov Chain\n\n")
-    } else if (x@order==1) {
-        cat("First-Order Markov Chain\n\n")
-    } else {
-        cat("Higher-Order Markov Chain (order=", x@order, ")\n\n", sep="")
-    }                
-    if (x@order>0) {
-        cat("Transition Probabilities:\n\n")
-        for (i in 1:x@order) {
-            cat("Lag: ", i, "\n")
-            cat("lambda: ", x@lambda[i], "\n")                
-            print(x@transitions[[i]])
-            cat("\n")
-            
-        }
-    } else {
-        cat("Probabilities:\n\n")
-        print(x@transitions[[1]])
-        cat("\n")
-    }        
-    cat("Start Probabilities:\n")
-    print(x@start)
-    cat("\n")
-    cat("End Probabilities:\n")
-    print(x@end)
-}
-)
 
 #' Prints a summary of a MarkovChain object
 #' 

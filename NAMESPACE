@@ -8,7 +8,6 @@ exportMethods(
     "initialize",
     "plot",
     "predict",
-    "print",
     "randomClicks",
     "show",
     "states",

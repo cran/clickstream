@@ -227,7 +227,7 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
 #' writeLines(clickstreams, csf)
 #' cls<-readClickstreams(csf, header=TRUE)
 #' mc<-fitMarkovChain(cls)
-#' print(mc)
+#' show(mc)
 #' 
 #' @export fitMarkovChain
 fitMarkovChain=function(clickstreamList, order=1) {  

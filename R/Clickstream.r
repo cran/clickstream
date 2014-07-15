@@ -253,8 +253,6 @@ summary.Clickstreams=function(object, ...) {
 
 
 
-
-
 #' Prints a ClickstreamClusters object
 #' 
 #' Prints a \code{ClickstreamClusters} object. A \code{ClickstreamClusters}
@@ -378,7 +376,7 @@ summary.ClickstreamClusters=function(object, ...) {
 #' 
 #' @export predict.ClickstreamClusters
 predict.ClickstreamClusters=function(object, pattern, ...) {
-    pos=aaply(.data=pattern@sequence, .margins=1, .fun=function(x) which(dimnames(object$centers)[[2]]==x))
+    pos=as.numeric(aaply(.data=as.character(pattern@sequence), .margins=1, .fun=function(x) which(dimnames(object$centers)[[2]]==x)))
     likelihood=aaply(.data=object$centers[,pos], .margins=1, .fun=prod)
     return(as.numeric(which(likelihood==max(likelihood))))
 }
