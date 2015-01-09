@@ -39,7 +39,7 @@ readClickstreams=function(file, sep=",", header=FALSE) {
     }
     
     ldat=split(dat, seq_len(nrow(dat)))
-    ldat=llply(.data=ldat, .fun=function(x) x[x != ""])
+    ldat=llply(.data=ldat, .fun=function(x) x[x != "" & !is.na(x)])
     if (header)
         names(ldat)=nams
     else

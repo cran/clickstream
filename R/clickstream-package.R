@@ -4,7 +4,7 @@
 #' model clickstreams as zero-order, first-order or higher-order Markov chains.
 #' 
 #' \tabular{ll}{ Package: \tab clickstream\cr Type: \tab Package\cr Version:
-#' \tab 1.1.1\cr Date: \tab 2014-05-19\cr License: \tab GPL-2\cr Depends: \tab
+#' \tab 1.1.3\cr Date: \tab 2015-01-06\cr License: \tab GPL-2\cr Depends: \tab
 #' R (>= 3.0), methods\cr }
 #' 
 #' @name clickstream-package
