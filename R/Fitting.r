@@ -1,50 +1,3 @@
-.getAbsorbingStates=function(clickstreamList) {
-    candidates=names(table(laply(.data=clickstreamList, .fun=function(x) x[length(x)])))
-    others=unique(as.character(unlist(llply(.data=clickstreamList, .fun=function(x) x[-length(x)]))))
-    pos=which(candidates %in% others)
-    if (length(pos) > 0) {
-        absorbing=candidates[-pos]
-    } else {
-        absorbing=candidates
-    }
-    return(absorbing)
-}
-
-.getAbsorbingFrequencies=function(absorbingState, clickstreamList) {
-    sublist=llply(.data=clickstreamList, .fun=function(x) if (x[length(x)]==absorbingState) x[-length(x)])
-    return(table(unlist(sublist)))
-}
-
-.getAbsorbingProbabilities=function(state, freqs) {
-    probs=laply(.data=freqs, .fun=function(x) ifelse(state%in%names(x), x[[state]], 0))
-    probs=c(state, probs/sum(probs))
-}
-
-.getAbsorbingMatrix=function(clickstreamList, absorbings, states) {
-    freqs=alply(.data=absorbings, .margins=1, .fun=.getAbsorbingFrequencies, clickstreamList)
-    probs=adply(.data=states, .margins=1, .fun=.getAbsorbingProbabilities, freqs)
-    probs=probs[,-1]
-    names(probs)=c("state", absorbings)
-    probs=probs[-which(probs$state%in%absorbings),]    
-    return(probs)
-}
-
-.isTransientState=function(state, clickstreamList) {    
-    successors=unique(as.character(unlist(
-        llply(.data=clickstreamList, 
-              .fun=function(x) if (state%in%x && which(x==state)[1]<length(x))
-                  x[which(x==state)[1]+1:(length(x)-which(x==state)[1])] 
-              else character()
-        )
-    )))
-    transient=ifelse(state %in% successors, T, F)
-    return(transient)
-}
-
-.getTransientStates=function(clickstreamList, states) {
-    transientStates=states[aaply(.data=states, .margins=1, .fun=.isTransientState, clickstreamList)]
-}
-
 .getSingleTransition=function(clickstream, i, states) {
     template=matrix(rep(0, length(states)^2), nrow=length(states))
     if (length(clickstream) > 1) {
@@ -53,16 +6,14 @@
         clickstream=c(clickstream, app)
         clicks=unlist(clickstream) 
         clicks2=c(clicks[-(1:i)], rep(NA, i))
-        dat=data.frame(clicks, clicks2) 
-        transition=dcast(dat, clicks~clicks2, fun.aggregate=length, value.var="clicks2")
+        dat=data.table(clicks, clicks2) 
+        transition=as.data.frame(dcast.data.table(dat, clicks~clicks2, fun.aggregate=length, value.var="clicks2"))
         row.names(transition)=transition[,1]        
-        transition=transition[,-1]
-        transition=transition[,-dim(transition)[2]]  
-        pos1=which(names(transition)=="[[-]]")
-        pos2=which(row.names(transition)=="[[-]]") 
+        pos1=which(!(names(transition) %in% states))
+        pos2=which(!(row.names(transition) %in% states)) 
         if (length(pos1)>0 && length(pos2)>0) {
             transition=transition[-pos2,-pos1, drop=F]
-            sums=aaply(.data=t(transition), .margins=2, .fun=sum)
+            sums=rowSums(transition)
             sums=ifelse(sums==0, 1, sums)
             transition=t(transition/sums)
             template[dimnames(transition)[[1]], dimnames(transition)[[2]]]=transition
@@ -84,9 +35,9 @@
 
 
 
-#' Perform k-means clustering on a list of clickstreams
+#' Performs K-Means Clustering on a List of Clickstreams
 #' 
-#' Perform k-means clustering on a list of clickstreams. For each clickstream a
+#' Performs k-means clustering on a list of clickstreams. For each clickstream a
 #' transition matrix of a given order is computed. These transition matrices
 #' are used as input for performing k-means clustering.
 #' 
@@ -99,8 +50,8 @@
 #' @param ...  Additional parameters for k-means clustering (see
 #' \code{\link{kmeans}}).
 #' @return This method returns a \code{ClickstreamClusters} object (S3-class).
-#' It is a list with the following components: \item{clusters}{ A list of
-#' \code{Clickstream} objects representing the resulting clusters.  }
+#' It is a list with the following components: \item{clusters}{ The resulting list of
+#' \code{Clickstreams} objects.}
 #' \item{centers}{ A matrix of cluster centres.  } \item{states}{ Vector of states} 
 #' \item{totss}{ The total sum of squares.  } \item{withinss}{ Vector of within-cluster 
 #' sum of squares, one component per cluster.  } \item{tot.withinss}{ Total within-cluster sum of
@@ -111,21 +62,21 @@
 #' \code{\link{summary.ClickstreamClusters}}
 #' @examples
 #' 
-#' clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#' clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
 #'                "User2,i,c,i,c,c,c,d",
 #'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf<-tempfile()
+#' csf <- tempfile()
 #' writeLines(clickstreams, csf)
-#' cls<-readClickstreams(csf, header=TRUE)
-#' clusters<-clusterClickstreams(cls, order=0, centers=2)
+#' cls <- readClickstreams(csf, header = TRUE)
+#' clusters <- clusterClickstreams(cls, order = 0, centers = 2)
 #' print(clusters)
 #' 
 #' @export clusterClickstreams
 clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
-    states=unique(as.character(unlist(clickstreamList)))
+    states=unique(as.character(unlist(clickstreamList, use.names = FALSE)))
     if (order==0) {
         transitionData=laply(.data=clickstreamList, .fun=.getSingleFrequencies, states)
     } else {        
@@ -144,24 +95,38 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
     return(clusters)
 } 
 
+.rotate=function(x, n) {
+    l=length(x)
+    n=n %% l
+    if (n == 0) {
+        return(x)
+    }
+    tmp=x[(l-n+1):l]
+    x[(n+1):l]=x[1:(l-n)]
+    x[1:n]=tmp
+    return(x)
+}
+
 .getQ=function(i, clickstreamList) { 
-    app=rep("[[-]]", i)
-    ldat=llply(.data=clickstreamList, .fun=function(x) c(x, app))
-    clicks=unlist(ldat) 
-    clicks2=c(clicks[-(1:i)], rep(clicks[1], i))
-    dat=data.frame(clicks, clicks2) 
-    transition=dcast(dat, clicks~clicks2, fun.aggregate=length, value.var="clicks2")
-    rnames=as.character(transition[-1,1])
+    clicks=clickstreamList
+    for (j in 1:i) {
+        clicks=rbind(clicks, "[[-]]")
+    }
+    clicks=unlist(clicks, use.names=F)
+    clicks2=.rotate(clicks, -i)
+    dat=data.table(clicks, clicks2) 
+    transition=as.data.frame(dcast.data.table(dat, clicks~clicks2, fun.aggregate=length, value.var="clicks2"))
     transition=transition[,-1]  
     pos=which(names(transition)=="[[-]]")
+    rnames=names(transition)[-pos]
     transition=transition[,-pos]
     transition=transition[-pos,]
-    row.names(transition)=rnames
-    names(transition)=rnames
-    sums=aaply(.data=t(transition), .margins=2, .fun=sum)
-    sums=ifelse(sums==0, 1, sums)
+    sums=colSums(t(transition))
+    sums[sums==0]=1
     ll=sum(transition*log(transition/sums), na.rm=T)
-    transition=t(transition/sums)
+    transition=as.data.frame(t(transition/sums))
+    names(transition)=rnames
+    rownames(transition)=rnames
     return(list(ll=ll, transition=transition))
 }
 
@@ -172,7 +137,7 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
     for (i in 1:length(QX)) {
         error=error+(params[i]*QX[[i]]-X)
     }
-    return(norm(as.matrix(error), type="F"))
+    return(sum(error^2))
 }
 
 .constr=function(params) {
@@ -181,9 +146,7 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
 
 
 
-
-
-#' Fits a list of clickstreams to a Markov chain
+#' Fits a List of Clickstreams to a Markov Chain
 #' 
 #' This function fits a list of clickstreams to a Markov chain. Zero-order,
 #' first-order as well as higher-order Markov chains are supported. For
@@ -217,41 +180,62 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
 #' @examples
 #' 
 #' # fitting a simple Markov chain
-#' clickstreams<-c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#' clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
 #'                "User2,i,c,i,c,c,c,d",
 #'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf<-tempfile()
+#' csf <- tempfile()
 #' writeLines(clickstreams, csf)
-#' cls<-readClickstreams(csf, header=TRUE)
-#' mc<-fitMarkovChain(cls)
+#' cls <- readClickstreams(csf, header = TRUE)
+#' mc <- fitMarkovChain(cls)
 #' show(mc)
 #' 
 #' @export fitMarkovChain
 fitMarkovChain=function(clickstreamList, order=1) {  
-    n=length(unlist(clickstreamList))
-    lens=laply(.data=clickstreamList, .fun=function(X) length(X))
+    clickVector=unlist(clickstreamList, use.names = FALSE)
+    states=unique(as.character(clickVector))
+    df=laply(.data=clickstreamList, .fun=function(x) c(length(x), x[1], x[length(x)]) )
+    lens=as.numeric(df[,1])
+    n=sum(lens)
     ratio=length(lens[lens>order])/length(lens)
     if (ratio<0.5) {
         stop("The order is to high for the specified click streams.")
     } else if (ratio<1) {        
         warning(paste("Some click streams are shorter than ", order, ".", sep=""))
     } 
-    absorbingStates=.getAbsorbingStates(clickstreamList)  
-    absorbingProbabilities=data.frame()
-    start=table(laply(.data=clickstreamList, .fun=function(x) x[1]))
+    start=table(df[,2])
     start=start/sum(start)
-    end=table(laply(.data=clickstreamList, .fun=function(x) x[length(x)]))
+    end=table(df[,3])
     end=end/sum(end)
-    states=unique(as.character(unlist(clickstreamList)))
-    if (length(absorbingStates>0)) {
-        absorbingProbabilities=.getAbsorbingMatrix(clickstreamList, absorbingStates, states)   
+    
+    # rm(df)
+    
+    q1=.getQ(1, clickstreamList)
+    transitions=q1$transition
+    diag(transitions)=0
+    cs=colSums(transitions)
+    rs=rowSums(transitions)
+    absorbingPositions=which(cs==0)
+    nonAbsorbingPositions=which(cs>0)
+    absorbingStates=names(absorbingPositions)
+    Q=transitions[nonAbsorbingPositions, nonAbsorbingPositions]
+    R=transitions[absorbingPositions, nonAbsorbingPositions]
+    It=diag(length(nonAbsorbingPositions))
+    N=solve(It-Q)
+    B=N %*% t(R)
+    if (length(absorbingStates) > 0) {
+        absorbingProbabilities=data.frame(state=names(nonAbsorbingPositions), B/rowSums(B))
+        row.names(absorbingProbabilities)=nonAbsorbingPositions
+    } else {
+        absorbingProbabilities=data.frame()
     }
-    transientStates=.getTransientStates(clickstreamList, states)
-    x=as.data.frame(table(unlist(clickstreamList)))
-    names(x)=c("states", "frequency")    
+    infTransitions=transitions * t(transitions)
+    csInf=colSums(infTransitions)
+    transientStates=names(which(csInf>0))
+    x=as.data.frame(table(clickVector))
+    names(x)=c("states", "frequency") 
     probability=x$frequency/sum(x$frequency)
     x=cbind(x, probability)
     if (order==0) {
@@ -268,8 +252,8 @@ fitMarkovChain=function(clickstreamList, order=1) {
         environment(.foo)=environment()
         params=rep(1/order, order)
         model=solnp(pars=params, fun=.foo, eqfun=.constr, eqB=1, LB=rep(0, order), control=list(trace=0))
-        lambda=model$par
-        logLikelihood=sum(lambda*ll)
+        lambda=model$pars
+        logLikelihood=as.numeric(lambda %*% ll)
     }
     markovChain=new("MarkovChain", states=states, order=order, start=start, end=end, transitions=transitions,
                     lambda=lambda, logLikelihood=logLikelihood, observations=n,
