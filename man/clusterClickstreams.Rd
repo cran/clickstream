@@ -11,8 +11,8 @@ clusterClickstreams(clickstreamList, order = 0, centers, ...)
   the cluster analysis is performed.} \item{order}{The order
   of the transition matrices used as input for clustering
   (default is 0).} \item{centers}{The number of clusters.}
-  \item{...}{Additional parameters for k-means clustering
-  (see \code{\link{kmeans}}).}
+  \item{...}{Additional parameters for k-means clustering (see
+  \code{\link{kmeans}}).}
 }
 \value{
 This method returns a \code{ClickstreamClusters} object

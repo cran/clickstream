@@ -161,6 +161,7 @@ setMethod("transientStates", "MarkovChain",
 #' @export
 setMethod("predict", "MarkovChain",
           function(object, startPattern, dist = 1, ties = "random") {
+              state = NULL
               absorbingProbabilities = data.matrix(startPattern@absorbingProbabilities)
               if (sum(absorbingProbabilities) > 0) {
                   if (length(absorbingProbabilities) != sum(
@@ -258,9 +259,9 @@ setMethod("plot", "MarkovChain",
               } else if (order > x@order) {
                   stop("Plotting order is higher than the order of the markov chain.")
               } else {
-                  graph = graph.adjacency(t(as.matrix(x@transitions[[order]])), weighted =
+                  graph = igraph::graph.adjacency(t(as.matrix(x@transitions[[order]])), weighted =
                                               T)
-                  edgeLabels = round(E(graph)$weight, digits)
+                  edgeLabels = round(igraph::E(graph)$weight, digits)
                   plot(graph, edge.label = edgeLabels, ...)
               }
           })

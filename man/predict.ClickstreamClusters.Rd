@@ -7,12 +7,12 @@
 \method{predict}{ClickstreamClusters}(object, pattern, ...)
 }
 \arguments{
-  \item{object}{A \code{ClickstreamClusters} object
-  containing the clusters. \code{ClickstreamClusters}
-  represent the result of a cluster analysis on a list of
-  clickstreams (see \code{\link{clusterClickstreams}}).}
-  \item{pattern}{The first clicks of a user as
-  \code{Pattern} object.} \item{...}{Ignored parameters.}
+  \item{object}{A \code{ClickstreamClusters} object containing
+  the clusters. \code{ClickstreamClusters} represent the
+  result of a cluster analysis on a list of clickstreams (see
+  \code{\link{clusterClickstreams}}).} \item{pattern}{Sequence
+  of a user's initial clicks as \code{Pattern} object.}
+  \item{...}{Ignored parameters.}
 }
 \value{
 Returns the index of the clusters to which the given

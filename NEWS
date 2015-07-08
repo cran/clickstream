@@ -1,3 +1,10 @@
+07-07-2015
+Version 1.1.5
+Fixed
+- Compatibility problem with igraph 1.0.0
+New
+- Possibility to estimate markov chains with linear programming (default).
+
 17-05-2015
 Version 1.1.4
 Improved

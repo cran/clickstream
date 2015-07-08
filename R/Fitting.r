@@ -144,6 +144,38 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
     return(sum(params))
 }
 
+.sollp=function(X, QX, lps = FALSE) {
+    if (lps) {
+        sumDir = "=="
+    } else {
+        sumDir = "<="
+    }
+    f.obj = c(rep(1, length(X)), rep(0, length(QX)))
+    f.con = t(sapply(X=seq(1, 2*length(X), 1), FUN=function(x) {
+        sign=(x %% 2)*2 -1; 
+        i=ceiling(x/2);
+        pre=rep(0, length(X))
+        pre[i]=1
+        c(pre, sign * sapply(X=QX, FUN=function(x) x[i]))
+    }))
+    f.con = rbind(f.con, c(rep(0, length(X)), rep(1, length(QX))))
+    f.con = rbind(f.con, diag(length(X) + length(QX)))
+    f.dir = c(rep(">=", 2*length(X)), sumDir, rep(">=", length(X) + length(QX)))
+    f.rhs = sapply(X=seq(1, 2*length(X), 1), FUN=function(x) {
+        sign=(x %% 2)*2 -1; 
+        i=ceiling(x/2);
+        sign * X[i]
+    })
+    f.rhs = c(f.rhs, 1, rep(0, length(X) + length(QX)))
+    result = solveLP(cvec = as.numeric(f.obj), 
+            bvec = as.numeric(f.rhs),
+            Amat = as.matrix(f.con),
+            maximum = FALSE,
+            const.dir = as.character(f.dir),
+            lpSolve = lps)
+    return(as.numeric(result$solution))
+}
+
 
 
 #' Fits a List of Clickstreams to a Markov Chain
@@ -151,7 +183,7 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
 #' This function fits a list of clickstreams to a Markov chain. Zero-order,
 #' first-order as well as higher-order Markov chains are supported. For
 #' estimating higher-order Markov chains this function solves the following
-#' quadratic programming problem:\cr \deqn{\min ||\sum_{i=1}^k X-\lambda_i
+#' linear or quadratic programming problem:\cr \deqn{\min ||\sum_{i=1}^k X-\lambda_i
 #' Q_iX||}{min ||\sum X-\lambda_i Q_iX||} \deqn{\mathrm{s.t.}}{s.t.}
 #' \deqn{\sum_{i=1}^k \lambda_i = 1}{sum \lambda_i = 1} \deqn{\lambda_i \ge
 #' 0}{\lambda_i \ge 0} The distribution of states is given as \eqn{X}.
@@ -168,6 +200,13 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
 #' the clickstreams. Per default, Markov chains with \code{order=1} are fitted.
 #' It is also possible to fit zero-order Markov chains (\code{order=0}) and
 #' higher-order Markov chains.
+#' @param verbose (Optional) An optimal logical variable to indicate whether warnings
+#' and infos should be printed.
+#' @param control (Optional) The control list of optimization parameters. Parameter
+#' \code{optimizer} specifies the type of solver used to solve the given
+#' optimization problem. Possible values are "linear" (default) and "quadratic".
+#' Parameter \code{use.lpSolve} determines whether lpSolve or linprog is used as
+#' linear solver.
 #' @return Returns a \code{MarkovChain} object.
 #' @note At least half of the clickstreams need to consist of as many clicks as
 #' the order of the Markov chain that should be fitted.
@@ -193,24 +232,38 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
 #' show(mc)
 #' 
 #' @export fitMarkovChain
-fitMarkovChain=function(clickstreamList, order=1) {  
+fitMarkovChain=function(clickstreamList, order=1, verbose=TRUE, control=list()) { 
+    ans=list()
+    params=unlist(control)
+    if (is.null(params)) {
+        ans$optimizer="linear"
+        ans$use.lpSolve=FALSE
+    } else {
+        npar = tolower(names(unlist(control)))
+        names(params) = npar
+        if(any(substr(npar, 1, 9) == "optimizer")) ans$optimizer = params["optimizer"] else ans$optimizer = "linear"
+        if(any(substr(npar, 1, 11) == "use.lpsolve")) ans$use.lpSolve = params["use.lpSolve"] else ans$use.lpSolve = FALSE
+    }
     clickVector=unlist(clickstreamList, use.names = FALSE)
     states=unique(as.character(clickVector))
-    df=laply(.data=clickstreamList, .fun=function(x) c(length(x), x[1], x[length(x)]) )
-    lens=as.numeric(df[,1])
+    #### DECIDE ####
+    if (as.numeric(R.Version()$major) > 3 || 
+        (as.numeric(R.Version()$major) == 3 && as.numeric(R.Version()$minor) >= 2)) {
+        lens=as.numeric(lengths(clickstreamList))
+    } else {
+        lens=as.numeric(laply(.data=clickstreamList, .fun=function(x) c(length(x))))
+    }
     n=sum(lens)
     ratio=length(lens[lens>order])/length(lens)
     if (ratio<0.5) {
         stop("The order is to high for the specified click streams.")
-    } else if (ratio<1) {        
+    } else if (ratio<1 && verbose) {        
         warning(paste("Some click streams are shorter than ", order, ".", sep=""))
     } 
-    start=table(df[,2])
+    start=table(clickVector[c(1, cumsum(lens[-length(lens)])+1)][1:10])
     start=start/sum(start)
-    end=table(df[,3])
+    end=table(clickVector[cumsum(lens)])
     end=end/sum(end)
-    
-    # rm(df)
     
     q1=.getQ(1, clickstreamList)
     transitions=q1$transition
@@ -250,9 +303,14 @@ fitMarkovChain=function(clickstreamList, order=1) {
         ll=laply(.data=Q, .fun=function(q) q$ll)
         QX=llply(.data=transitions, .fun=function(tr) as.matrix(tr)%*%X) 
         environment(.foo)=environment()
-        params=rep(1/order, order)
-        model=solnp(pars=params, fun=.foo, eqfun=.constr, eqB=1, LB=rep(0, order), control=list(trace=0))
-        lambda=model$pars
+        if (ans$optimizer == "quadratic") {
+            params=rep(1/order, order)
+            model=solnp(pars=params, fun=.foo, eqfun=.constr, eqB=1, LB=rep(0, order), control=list(trace=0))
+            lambda=model$pars
+        } else {
+            solution=.sollp(X, QX, ans$use.lpSolve)
+            lambda=solution[seq(length(solution) - length(QX) + 1, length(solution), 1)]
+        }
         logLikelihood=as.numeric(lambda %*% ll)
     }
     markovChain=new("MarkovChain", states=states, order=order, start=start, end=end, transitions=transitions,

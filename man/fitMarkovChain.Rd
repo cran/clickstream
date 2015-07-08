@@ -4,15 +4,24 @@
 \alias{fitMarkovChain}
 \title{Fits a List of Clickstreams to a Markov Chain}
 \usage{
-fitMarkovChain(clickstreamList, order = 1)
+fitMarkovChain(clickstreamList, order = 1, verbose = TRUE,
+  control = list())
 }
 \arguments{
   \item{clickstreamList}{A list of clickstreams for which a
   Markov chain is fitted.} \item{order}{(Optional) The order
   of the Markov chain that is fitted from the clickstreams.
-  Per default, Markov chains with \code{order=1} are fitted.
-  It is also possible to fit zero-order Markov chains
-  (\code{order=0}) and higher-order Markov chains.}
+  Per default, Markov chains with \code{order=1} are
+  fitted. It is also possible to fit zero-order Markov
+  chains (\code{order=0}) and higher-order Markov chains.}
+  \item{verbose}{(Optional) An optimal logical variable to
+  indicate whether warnings and infos should be printed.}
+  \item{control}{(Optional) The control list of optimization
+  parameters. Parameter \code{optimizer} specifies the type
+  of solver used to solve the given optimization problem.
+  Possible values are "linear" (default) and "quadratic".
+  Parameter \code{use.lpSolve} determines whether lpSolve or
+  linprog is used as linear solver.}
 }
 \value{
 Returns a \code{MarkovChain} object.
@@ -20,8 +29,8 @@ Returns a \code{MarkovChain} object.
 \description{
 This function fits a list of clickstreams to a Markov
 chain. Zero-order, first-order as well as higher-order
-Markov chains are supported. For estimating higher-
-order Markov chains this function solves the following
+Markov chains are supported. For estimating higher-order
+Markov chains this function solves the following linear or
 quadratic programming problem:\cr \deqn{\min ||\sum_{i=1}
 ^k X-\lambda_i Q_iX||}{min ||\sum X-\lambda_i Q_iX||}
 \deqn{\mathrm{s.t.}}{s.t.} \deqn{\sum_{i=1}^k \lambda_i

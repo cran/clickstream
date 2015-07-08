@@ -10,12 +10,11 @@
 randomClicks(object, startPattern, dist)
 }
 \arguments{
-  \item{object}{The \code{MarkovChain} used for generating
-  the next click(s)} \item{startPattern}{\code{Pattern}
-  containing the first clicks of a user. A \code{Pattern}
-  object with an empty sequence is also possible.}
-  \item{dist}{(Optional) The number of clicks that should be
-  generated (default is 1).}
+  \item{object}{The \code{MarkovChain} used for generating the
+  next click(s)} \item{startPattern}{\code{Pattern} containing
+  the first clicks of a user. A \code{Pattern} object with an
+  empty sequence is also possible.} \item{dist}{(Optional) The
+  number of clicks that should be generated (default is 1).}
 }
 \description{
 Generates a Sequence of Clicks

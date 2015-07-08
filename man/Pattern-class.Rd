@@ -15,8 +15,8 @@ sequence of clicks and a probability of occurrence.
 \section{Objects from the Class}{
   Objects can be created by calls of the form
   \code{new("Pattern", sequence, probability, ...)}. This S4
-  class describes a click pattern consisting of a sequence
-  of clicks and a probability of occurrence.
+  class describes a click pattern consisting of a sequence of
+  clicks and a probability of occurrence.
 }
 \examples{
 # show Pattern definition

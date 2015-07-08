@@ -17,9 +17,9 @@ Returns All Transient States
 }
 \section{Methods}{
   \describe{ \item{list("signature(object = \"MarkovChain
-  \")")}{ Returns the names of all states that have a non-
-  zero probability that a user will never return to them
-  (i.e. that are transient). } }
+  \")")}{ Returns the names of all states that have a non-zero
+  probability that a user will never return to them (i.e. that
+  are transient). } }
 }
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}

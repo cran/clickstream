@@ -4,7 +4,7 @@
 #' model clickstreams as zero-order, first-order or higher-order Markov chains.
 #' 
 #' \tabular{ll}{ Package: \tab clickstream\cr Type: \tab Package\cr Version:
-#' \tab 1.1.4\cr Date: \tab 2015-05-17\cr License: \tab GPL-2\cr Depends: \tab
+#' \tab 1.1.5\cr Date: \tab 2015-07-07\cr License: \tab GPL-2\cr Depends: \tab
 #' R (>= 3.0), methods\cr }
 #' 
 #' @name clickstream-package
@@ -14,7 +14,10 @@
 #' @references For modeling clickstreams with Markov chains, see Ching, W.-K.
 #' et al.: \emph{Markov Chains -- Models, Algorithms and Applications}, 2nd
 #' edition, Springer, 2013.
-#' @import methods Rsolnp arules data.table igraph plyr
+#' @import methods Rsolnp arules data.table plyr linprog
+#' @importFrom stats runif rpois kmeans
+#' @importFrom utils read.table write.table count.fields
+#' @importFrom igraph E graph.adjacency
 #' @keywords click stream Markov chain
 #' @examples
 #' 

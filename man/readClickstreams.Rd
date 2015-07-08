@@ -13,8 +13,8 @@ readClickstreams(file, sep = ",", header = FALSE)
   file name is relative to the current working directory,
   \code{\link{getwd}}.} \item{sep}{The character separating
   clicks (default is \dQuote{,}).} \item{header}{A logical
-  flag indicating whether the first entry of each line in
-  the file is the name of the clickstream user.}
+  flag indicating whether the first entry of each line in the
+  file is the name of the clickstream user.}
 }
 \value{
 A list of clickstreams. Each element is a vector of

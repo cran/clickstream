@@ -376,7 +376,7 @@ summary.ClickstreamClusters = function(object, ...) {
 #' clusters. \code{ClickstreamClusters} represent the result of a
 #' cluster analysis on a list of clickstreams (see
 #' \code{\link{clusterClickstreams}}).
-#' @param pattern The first clicks of a user as \code{Pattern} object.
+#' @param pattern Sequence of a user's initial clicks as \code{Pattern} object.
 #' @param ...  Ignored parameters.
 #' @method predict ClickstreamClusters
 #' @return Returns the index of the clusters to which the given \code{Pattern}

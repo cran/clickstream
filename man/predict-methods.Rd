@@ -32,9 +32,9 @@ Predicts the Next Click(s) of a User
   estimated as follows:\cr \deqn{X^{(n)}=B \cdot \sum_{i=1}
   ^k \lambda_iQ_iX^{(n-i)}}{X^n=B * sum \lambda_i Q_iX^{n-
   i}} The distribution of states at time \eqn{n} is given as
-  \eqn{X^n}. The transition matrix for lag \eqn{i} is given
-  as \eqn{Q_i}. \eqn{\lambda_i} specifies the lag parameter
-  and \eqn{B} the absorbing probability matrix. } }
+  \eqn{X^n}. The transition matrix for lag \eqn{i} is given as
+  \eqn{Q_i}. \eqn{\lambda_i} specifies the lag parameter and
+  \eqn{B} the absorbing probability matrix. } }
 }
 \examples{
 # fitting a simple Markov chain and predicting the next click
