@@ -19,7 +19,10 @@
             template[dimnames(transition)[[1]], dimnames(transition)[[2]]]=transition
         } 
     }
-    return(as.vector(template))
+    singleTransition = as.vector(template)
+    nms = expand.grid(states, states)
+    names(singleTransition) = paste(nms$Var1, nms$Var2, sep=",")
+    return(singleTransition)
 }
 
 .getSingleFrequencies=function(clickstream, states) {
@@ -45,7 +48,7 @@
 #' @param clickstreamList A list of clickstreams for which the cluster analysis
 #' is performed.
 #' @param order The order of the transition matrices used as input for
-#' clustering (default is 0).
+#' clustering (default is 0; 0 and 1 are possible).
 #' @param centers The number of clusters.
 #' @param ...  Additional parameters for k-means clustering (see
 #' \code{\link{kmeans}}).
@@ -90,7 +93,8 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
         class(clusterList[[i]])="Clickstreams"        
     }
     clusters=list(clusters=clusterList, centers=fit$centers, states=states, totss=fit$totss,
-                  withinss=fit$withinss, tot.withinss=fit$tot.withinss, betweenss=fit$betweenss)
+                  withinss=fit$withinss, tot.withinss=fit$tot.withinss, betweenss=fit$betweenss,
+                  order=order)
     class(clusters)="ClickstreamClusters"
     return(clusters)
 } 
@@ -260,7 +264,7 @@ fitMarkovChain=function(clickstreamList, order=1, verbose=TRUE, control=list()) 
     } else if (ratio<1 && verbose) {        
         warning(paste("Some click streams are shorter than ", order, ".", sep=""))
     } 
-    start=table(clickVector[c(1, cumsum(lens[-length(lens)])+1)][1:10])
+    start=table(clickVector[c(1, cumsum(lens[-length(lens)])+1)])
     start=start/sum(start)
     end=table(clickVector[cumsum(lens)])
     end=end/sum(end)

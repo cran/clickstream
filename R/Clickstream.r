@@ -401,13 +401,19 @@ summary.ClickstreamClusters = function(object, ...) {
 #'
 #' @export 
 predict.ClickstreamClusters = function(object, pattern, ...) {
-    pos = as.numeric(aaply(
-        .data = as.character(pattern@sequence), .margins = 1, .fun = function(x)
-            which(dimnames(object$centers)[[2]] == x)
-    ))
-    likelihood = aaply(.data = object$centers[,pos], .margins = 1, .fun =
-                           prod)
-    return(as.numeric(which(likelihood == max(likelihood))))
+    if (object$order == 0) {
+        pos = as.numeric(aaply(
+            .data = as.character(pattern@sequence), .margins = 1, .fun = function(x)
+                which(dimnames(object$centers)[[2]] == x)
+        ))
+        likelihood = aaply(.data = object$centers[,pos], .margins = 1, .fun =
+                               prod)
+        return(as.numeric(which(likelihood == max(likelihood))))
+    } else {
+        transitions = .getSingleTransition(pattern@sequence, object$order, object$states)
+        sim = aaply(.data=object$centers, .margins=1, .fun=function(x) cor(x, transitions))
+        return(as.numeric(which(sim == max(sim))))
+    }
 }
 
 

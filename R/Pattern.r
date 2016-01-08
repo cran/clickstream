@@ -49,10 +49,10 @@ setMethod("initialize",
 
 #' Shows a \code{Pattern} Object
 #'
-#' @name show-methods
-#' @aliases show,Pattern-method
+#' @export
 #' @docType methods
-#' @method show
+#' @rdname show-methods
+#' @aliases show,Pattern-method
 #' @param object An instance of the \code{Pattern}-class
 #' @section Methods: \describe{
 #'

@@ -15,7 +15,7 @@
 #' et al.: \emph{Markov Chains -- Models, Algorithms and Applications}, 2nd
 #' edition, Springer, 2013.
 #' @import methods Rsolnp arules data.table plyr linprog
-#' @importFrom stats runif rpois kmeans
+#' @importFrom stats runif rpois kmeans cor
 #' @importFrom utils read.table write.table count.fields
 #' @importFrom igraph E graph.adjacency
 #' @keywords click stream Markov chain

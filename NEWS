@@ -1,3 +1,10 @@
+08-01-2016
+Version 1.1.6
+Fixed
+- Citation file was using deprecated arguments.
+- Incorrect start probabilities.
+- Incorrect prediction of cluster assignment when clustering clickstreams with an order > 0.
+
 07-07-2015
 Version 1.1.5
 Fixed

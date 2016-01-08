@@ -47,17 +47,16 @@ setClass(
 
 #' Returns All States
 #'
-#' @name states-methods
-#' @aliases states states,MarkovChain-method
+#' @export
 #' @docType methods
-#' @method states
+#' @rdname states-methods
+#' @aliases states states,MarkovChain-method
 #' @param object An instance of the \code{MarkovChain}-class
 #' @section Methods: \describe{
 #'
 #' \item{list("signature(object = \"MarkovChain\")")}{ Returns the name of all states of a \code{MarkovChain} object. } }
 #' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
 #' @keywords methods
-#' @export
 setGeneric("states", function(object)
     standardGeneric("states"))
 setMethod("states", "MarkovChain",
@@ -67,18 +66,17 @@ setMethod("states", "MarkovChain",
 
 #' Returns All Absorbing States
 #'
-#' @name absorbingStates-methods
-#' @aliases absorbingStates absorbingStates,MarkovChain-method
+#' @export
 #' @docType methods
+#' @rdname absorbingStates-methods
+#' @aliases absorbingStates absorbingStates,MarkovChain-method
+#' @param object An instance of the \code{MarkovChain}-class
 #' @section Methods: \describe{
 #'
 #' \item{list("signature(object = \"MarkovChain\")")}{ Returns the names of all states that never have a successor
 #' in a clickstream (i.e. that are absorbing).} }
-#' @method absorbingStates
-#' @param object An instance of the \code{MarkovChain}-class
 #' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
 #' @keywords methods
-#' @export
 setGeneric("absorbingStates", function(object)
     standardGeneric("absorbingStates"))
 setMethod("absorbingStates", "MarkovChain",
@@ -88,10 +86,10 @@ setMethod("absorbingStates", "MarkovChain",
 
 #' Returns All Transient States
 #'
-#' @name transientStates-methods
-#' @aliases transientStates transientStates,MarkovChain-method
+#' @export
 #' @docType methods
-#' @method transientStates
+#' @rdname transientStates-methods
+#' @aliases transientStates transientStates,MarkovChain-method
 #' @param object An instance of the \code{MarkovChain}-class
 #' @section Methods: \describe{
 #'
@@ -99,7 +97,6 @@ setMethod("absorbingStates", "MarkovChain",
 #' probability that a user will never return to them (i.e. that are transient). } }
 #' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
 #' @keywords methods
-#' @export
 setGeneric("transientStates", function(object)
     standardGeneric("transientStates"))
 setMethod("transientStates", "MarkovChain",
@@ -109,10 +106,10 @@ setMethod("transientStates", "MarkovChain",
 
 #' Predicts the Next Click(s) of a User
 #'
-#' @name predict-methods
-#' @aliases predict,MarkovChain-method
+#' @export
 #' @docType methods
-#' @method predict
+#' @rdname predict-methods
+#' @aliases predict,MarkovChain-method
 #' @param object The \code{MarkovChain} used for predicting the next
 #' click(s)
 #' @param startPattern Starting clicks of a user as \code{Pattern} object. A
@@ -158,7 +155,6 @@ setMethod("transientStates", "MarkovChain",
 #'         absorbingProbabilities = data.frame(d = 0.2, o = 0.8))
 #' predict(mc, startPattern)
 #'
-#' @export
 setMethod("predict", "MarkovChain",
           function(object, startPattern, dist = 1, ties = "random") {
               state = NULL
@@ -268,10 +264,10 @@ setMethod("plot", "MarkovChain",
 
 #' Generates a Sequence of Clicks
 #'
-#' @name randomClicks-methods
-#' @aliases randomClicks randomClicks,MarkovChain-method
+#' @export
 #' @docType methods
-#' @method randomClicks
+#' @rdname randomClicks-methods
+#' @aliases randomClicks randomClicks,MarkovChain-method
 #' @param object The \code{MarkovChain} used for generating the next
 #' click(s)
 #' @param startPattern \code{Pattern} containing the first clicks of a user. A
@@ -301,7 +297,6 @@ setMethod("plot", "MarkovChain",
 #' startPattern <- new("Pattern", sequence = c("h", "c"))
 #' predict(mc, startPattern)
 #'
-#' @export
 setGeneric("randomClicks", function(object, startPattern, dist)
     standardGeneric("randomClicks"))
 setMethod("randomClicks", "MarkovChain",
@@ -381,10 +376,10 @@ setMethod("show", "MarkovChain", function(object) {
 
 #' Prints the Summary of a MarkovChain Object
 #'
-#' @name summary-methods
-#' @aliases summary-methods summary,MarkovChain-method
+#' @export
 #' @docType methods
-#' @method summary
+#' @rdname summary-methods
+#' @aliases summary-methods summary,MarkovChain-method
 #' @param object An instance of the \code{MarkovChain}-class
 #' @return Returns a \code{MarkovChainSummary} object.
 #'
@@ -400,7 +395,6 @@ setMethod("show", "MarkovChain", function(object) {
 #' \item{list("signature(object = \"MarkovChain\")")}{ Generates a summary for a given \code{MarkovChain} object } }
 #' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
 #' @keywords methods
-#' @export
 setMethod("summary", "MarkovChain",
           function(object) {
               if (object@order == 0) {
