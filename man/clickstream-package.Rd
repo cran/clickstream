@@ -12,7 +12,7 @@ first-order or higher-order Markov chains.
 }
 \details{
 \tabular{ll}{ Package: \tab clickstream\cr Type: \tab
-Package\cr Version: \tab 1.1.5\cr Date: \tab 2015-07-07\cr
+Package\cr Version: \tab 1.1.7\cr Date: \tab 2015-07-07\cr
 License: \tab GPL-2\cr Depends: \tab R (>= 3.0), methods
 \cr }
 }

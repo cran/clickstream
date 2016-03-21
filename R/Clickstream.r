@@ -498,7 +498,7 @@ as.transactions = function(clickstreamList) {
     ), use.names = F)
     transactionInfo = data.frame(transactionID, sequenceID, eventID)
     tr = as(as.data.frame(unlist(clickstreamList, use.names = F)), "transactions")
-    tr@transactionInfo = transactionInfo
-    tr@itemInfo$labels = tr@itemInfo$levels
+    transactionInfo(tr) = transactionInfo
+    itemInfo(tr)$labels = itemInfo(tr)$levels 
     return(tr)
 }
