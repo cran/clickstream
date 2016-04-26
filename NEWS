@@ -1,5 +1,10 @@
+26-04-2016
+Version 1.1.8
+Fixed
+- Incorrect absorbing probabilities when predicting the next states of a given pattern and markov chain object when one of the next states is an absorbing state (thanks to Sebastian Lechner for reporting the bug).
+
 21-03-2016
-Version 1.17
+Version 1.1.7
 Fixed
 - Compatibility problem with arules 1.4.0
 

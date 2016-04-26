@@ -171,7 +171,7 @@ setMethod("predict", "MarkovChain",
               if (sum(absorbingProbabilities) > 0) {
                   ap = rbind(data.matrix(object@absorbingProbabilities[,-1]), diag(length(absorbingProbabilities)))
                   ap = ap %*% t(absorbingProbabilities)
-                  ap = ap / sum(ap)
+                  ap = ap / sum(ap, na.rm = T)
                   row.names(ap) = NULL
                   stateNames = c(t(object@absorbingProbabilities[1]),
                                  colnames(absorbingProbabilities))
@@ -214,8 +214,8 @@ setMethod("predict", "MarkovChain",
                           }
                           if (sum(absorbingProbabilities) > 0) {
                               cp = probs * ap$probability
-                              cp = cp / sum(cp)
-                              nextState = names(which(cp == max(cp)))
+                              cp = cp / sum(cp, na.rm = T)
+                              nextState = names(which(cp == max(cp, na.rm = T)))
                               prob = as.numeric(cp[nextState])
                           } else {
                               nextState = names(probs)[which(probs == max(probs))]
@@ -235,8 +235,13 @@ setMethod("predict", "MarkovChain",
                   resultPattern@probability = resultPattern@probability *
                       prob
                   if (sum(absorbingProbabilities) > 0) {
-                      absorbingProbabilities = as.numeric(subset(object@absorbingProbabilities, state ==
+                      if (nextState %in% object@absorbingStates) {
+                          absorbingProbabilities = matrix(as.numeric(nextState == object@absorbingStates), nrow = 1)
+                          colnames(absorbingProbabilities) = object@absorbingStates
+                      } else {
+                          absorbingProbabilities = as.numeric(subset(object@absorbingProbabilities, state ==
                                                                      nextState)[-1]) * absorbingProbabilities
+                      }
                       absorbingProbabilities = absorbingProbabilities / sum(absorbingProbabilities)
                       resultPattern@absorbingProbabilities = as.data.frame(absorbingProbabilities)
                   }
