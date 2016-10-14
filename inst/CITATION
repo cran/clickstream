@@ -1,11 +1,20 @@
-citHeader("To cite package clickstream in publications use:")
+bibentry(bibtype = "Article",
+  title        = "{R} Package {clickstream}: Analyzing Clickstream Data with Markov Chains",
+  author       = person(given = "Michael",
+                        family = "Scholz",
+                        email = "michael.scholz@uni-passau.de"),
+  journal      = "Journal of Statistical Software",
+  year         = "2016",
+  volume       = "74",
+  number       = "4",
+  pages        = "1--17",
+  doi          = "10.18637/jss.v074.i04",
 
-citEntry(entry="Manual",
-         title = "clickstream: an R package for analyzing clickstreams",
-         author = person(given="Michael", family="Scholz"),
-         month="01",
-         year="2015",
-         note="R package version 1.1.6",
-         textVersion = "Michael Scholz. 
-    	 clickstream: an R package for analyzing clickstreams"
-         )
+  header       = "To cite clickstream in publications use:",
+  textVersion  =
+  paste("Michael Scholz (2016).",
+        "R Package clickstream: Analyzing Clickstream Data with Markov Chains.",
+        "Journal of Statistical Software, 74(4), 1-17.",
+        "doi:10.18637/jss.v074.i04")
+)
+

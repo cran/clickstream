@@ -12,7 +12,7 @@ first-order or higher-order Markov chains.
 }
 \details{
 \tabular{ll}{ Package: \tab clickstream\cr Type: \tab
-Package\cr Version: \tab 1.1.8\cr Date: \tab 2016-04-26\cr
+Package\cr Version: \tab 1.1.9\cr Date: \tab 2016-10-14\cr
 License: \tab GPL-2\cr Depends: \tab R (>= 3.0), methods
 \cr }
 }
@@ -38,9 +38,12 @@ plot(mc)
 Michael Scholz \email{michael.scholz@uni-passau.de}
 }
 \references{
-For modeling clickstreams with Markov chains, see Ching, W.-
-K. et al.: \emph{Markov Chains -- Models, Algorithms and
-Applications}, 2nd edition, Springer, 2013.
+Scholz, M. (2016) R Package clickstream: Analyzing
+Clickstream Data with Markov Chains, \emph{Journal of
+Statistical Software}, \bold{74}, 4, pages 1--17 . Ching,
+W.-K.and Huang, X. and Ng, M.K. and Siu, T.-K. (2013)
+\emph{Markov Chains -- Models, Algorithms and Applications},
+2nd edition, New York: Springer-Verlag.
 }
 \keyword{Markov}
 \keyword{chain}
