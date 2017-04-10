@@ -7,9 +7,10 @@
 \method{print}{MarkovChainSummary}(x, ...)
 }
 \arguments{
-  \item{x}{A \code{MarkovChainSummary} object generated with
-  the function \code{\link[=MarkovChain-class]{summary}}}
-  \item{...}{Ignored parameters.}
+\item{x}{A \code{MarkovChainSummary} object generated with
+the function \code{\link[=MarkovChain-class]{summary}}}
+
+\item{...}{Ignored parameters.}
 }
 \description{
 Prints the summary of a \code{MarkovChain} object.
@@ -29,10 +30,9 @@ mc <- fitMarkovChain(cls)
 print(summary(mc))
 
 }
-\author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
-}
 \seealso{
 \code{\link[=MarkovChain-class]{summary}}
 }
-
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}

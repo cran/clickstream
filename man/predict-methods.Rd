@@ -9,32 +9,36 @@
   ties = "random")
 }
 \arguments{
-  \item{object}{The \code{MarkovChain} used for predicting
-  the next click(s)} \item{startPattern}{Starting clicks of
-  a user as \code{Pattern} object. A \code{Pattern} with an
-  empty sequence is also possible.} \item{dist}{(Optional)
-  The number of clicks that should be predicted (default
-  is 1).} \item{ties}{(Optional) The strategy for handling
-  ties in predicting the next click. Possible strategies are
-  \code{random} (default) and \code{first}.}
+\item{object}{The \code{MarkovChain} used for predicting the next
+click(s)}
+
+\item{startPattern}{Starting clicks of a user as \code{Pattern} object. A
+\code{Pattern} with an empty sequence is also possible.}
+
+\item{dist}{(Optional) The number of clicks that should be predicted
+(default is 1).}
+
+\item{ties}{(Optional) The strategy for handling ties in predicting the next
+click. Possible strategies are \code{random} (default) and \code{first}.}
 }
 \description{
 Predicts the Next Click(s) of a User
 }
 \section{Methods}{
-  \describe{ \item{list("signature(object = \"MarkovChain
-  \")")}{ This method predicts the next click(s) of a user.
-  The first clicks of a user are given as \code{Pattern}
-  object. The next click(s) are predicted based on the
-  transition probabilities in the \code{MarkovChain} object.
-  The probability distribution of the next click (n) is
-  estimated as follows:\cr \deqn{X^{(n)}=B \cdot \sum_{i=1}
-  ^k \lambda_iQ_iX^{(n-i)}}{X^n=B * sum \lambda_i Q_iX^{n-
-  i}} The distribution of states at time \eqn{n} is given as
-  \eqn{X^n}. The transition matrix for lag \eqn{i} is given as
-  \eqn{Q_i}. \eqn{\lambda_i} specifies the lag parameter and
-  \eqn{B} the absorbing probability matrix. } }
+ \describe{
+
+\item{list("signature(object = \"MarkovChain\")")}{ This method predicts the next click(s) of a user.
+The first clicks of a user
+are given as \code{Pattern} object. The next click(s) are predicted based on
+the transition probabilities in the \code{MarkovChain} object. The
+probability distribution of the next click (n) is estimated as follows:\cr
+\deqn{X^{(n)}=B \cdot \sum_{i=1}^k \lambda_iQ_iX^{(n-i)}}{X^n=B * sum
+\lambda_i Q_iX^{n-i}} The distribution of states at time \eqn{n} is given as
+\eqn{X^n}. The transition matrix for lag \eqn{i} is given as \eqn{Q_i}.
+\eqn{\lambda_i} specifies the lag parameter and \eqn{B} the absorbing
+probability matrix. } }
 }
+
 \examples{
 
 # fitting a simple Markov chain and predicting the next click
@@ -58,11 +62,10 @@ startPattern <- new("Pattern", sequence = c("h", "c"),
 predict(mc, startPattern)
 
 }
-\author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
-}
 \seealso{
 \code{\link{fitMarkovChain}}
 }
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}
 \keyword{methods}
-

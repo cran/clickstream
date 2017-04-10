@@ -7,15 +7,13 @@
 frequencies(clickstreamList)
 }
 \arguments{
-  \item{clickstreamList}{A list of clickstreams.}
+\item{clickstreamList}{A list of clickstreams.}
 }
 \value{
-A data frame containing state frequencies for each
-clickstream.
+A data frame containing state frequencies for each clickstream.
 }
 \description{
-Generates a data frame of state frequencies for all
-clickstreams in a list of clickstreams.
+Generates a data frame of state frequencies for all clickstreams in a list of clickstreams.
 }
 \examples{
 
@@ -31,10 +29,9 @@ cls <- readClickstreams(csf, header = TRUE)
 frequencyDF <- frequencies(cls)
 
 }
-\author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
-}
 \seealso{
 \code{\link{transactions}}
 }
-
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}

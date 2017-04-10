@@ -7,21 +7,23 @@
 \method{predict}{ClickstreamClusters}(object, pattern, ...)
 }
 \arguments{
-  \item{object}{A \code{ClickstreamClusters} object containing
-  the clusters. \code{ClickstreamClusters} represent the
-  result of a cluster analysis on a list of clickstreams (see
-  \code{\link{clusterClickstreams}}).} \item{pattern}{Sequence
-  of a user's initial clicks as \code{Pattern} object.}
-  \item{...}{Ignored parameters.}
+\item{object}{A \code{ClickstreamClusters} object containing the
+clusters. \code{ClickstreamClusters} represent the result of a
+cluster analysis on a list of clickstreams (see
+\code{\link{clusterClickstreams}}).}
+
+\item{pattern}{Sequence of a user's initial clicks as \code{Pattern} object.}
+
+\item{...}{Ignored parameters.}
 }
 \value{
-Returns the index of the clusters to which the given
-\code{Pattern} object most probably belongs to.
+Returns the index of the clusters to which the given \code{Pattern}
+object most probably belongs to.
 }
 \description{
-Predicts the cluster for a given \code{Pattern} object.
-Potential clusters need to be identified with the method
-\code{clusterClickstreams} before predicting the cluster.
+Predicts the cluster for a given \code{Pattern} object. Potential clusters
+need to be identified with the method \code{clusterClickstreams} before
+predicting the cluster.
 }
 \examples{
 
@@ -39,11 +41,10 @@ pattern <- new("Pattern", sequence = c("h", "c"))
 predict(clusters, pattern)
 
 }
-\author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
-}
 \seealso{
 \code{\link{clusterClickstreams}},
 \code{\link{print.ClickstreamClusters}}
 }
-
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}

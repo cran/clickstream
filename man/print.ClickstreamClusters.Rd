@@ -7,15 +7,14 @@
 \method{print}{ClickstreamClusters}(x, ...)
 }
 \arguments{
-  \item{x}{A \code{ClickstreamClusters} object (see
-  \code{\link{clusterClickstreams}}).} \item{...}{Ignored
-  parameters.}
+\item{x}{A \code{ClickstreamClusters} object (see \code{\link{clusterClickstreams}}).}
+
+\item{...}{Ignored parameters.}
 }
 \description{
-Prints a \code{ClickstreamClusters} object. A
-\code{ClickstreamClusters} object represents the result
-of a cluster analysis on a list of clickstreams (see
-\code{\link{clusterClickstreams}}).
+Prints a \code{ClickstreamClusters} object. A \code{ClickstreamClusters}
+object represents the result of a cluster analysis on a list of clickstreams
+(see \code{\link{clusterClickstreams}}).
 }
 \examples{
 
@@ -32,11 +31,10 @@ clusters <- clusterClickstreams(cls, order = 0, centers = 2)
 print(clusters)
 
 }
-\author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
-}
 \seealso{
 \code{\link{clusterClickstreams}},
 \code{\link{summary.ClickstreamClusters}}
 }
-
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}

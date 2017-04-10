@@ -11,10 +11,10 @@
 Class \code{"MarkovChain"}
 }
 \section{Objects from the Class}{
-  Objects can be created by calls of the form
-  \code{new("MarkovChain", ...)}. This S4 class describes
-  \code{MarkovChain} objects.
+ Objects can be created by calls of the form
+\code{new("MarkovChain", ...)}. This S4 class describes \code{MarkovChain} objects.
 }
+
 \examples{
 
 # show MarkovChain definition
@@ -34,11 +34,10 @@ mc <- fitMarkovChain(cls)
 show(mc)
 
 }
-\author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
-}
 \seealso{
 \code{\link{fitMarkovChain}}
 }
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}
 \keyword{classes}
-

@@ -7,20 +7,20 @@
 readClickstreams(file, sep = ",", header = FALSE)
 }
 \arguments{
-  \item{file}{The name of the file which the clickstreams
-  are to be read from. Each line of the file appears as one
-  click stream. If it does not contain an absolute path, the
-  file name is relative to the current working directory,
-  \code{\link{getwd}}.} \item{sep}{The character separating
-  clicks (default is \dQuote{,}).} \item{header}{A logical
-  flag indicating whether the first entry of each line in the
-  file is the name of the clickstream user.}
+\item{file}{The name of the file which the clickstreams are to be read from.
+Each line of the file appears as one click stream. If it does not contain an
+absolute path, the file name is relative to the current working directory,
+\code{\link{getwd}}.}
+
+\item{sep}{The character separating clicks (default is \dQuote{,}).}
+
+\item{header}{A logical flag indicating whether the first entry of each line
+in the file is the name of the clickstream user.}
 }
 \value{
-A list of clickstreams. Each element is a vector of
-characters representing the clicks. The name of each list
-element is either the header of a clickstream file or a
-unique number.
+A list of clickstreams. Each element is a vector of characters
+representing the clicks. The name of each list element is either the header
+of a clickstream file or a unique number.
 }
 \description{
 Reads a list of clickstream from a csv-file.
@@ -39,11 +39,9 @@ cls <- readClickstreams(csf, header = TRUE)
 print(cls)
 
 }
+\seealso{
+\code{\link{print.Clickstreams}}, \code{\link{randomClickstreams}}
+}
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}
 }
-\seealso{
-\code{\link{print.Clickstreams}},
-\code{\link{randomClickstreams}}
-}
-

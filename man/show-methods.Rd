@@ -8,17 +8,18 @@
 \S4method{show}{Pattern}(object)
 }
 \arguments{
-  \item{object}{An instance of the \code{Pattern}-class}
+\item{object}{An instance of the \code{Pattern}-class}
 }
 \description{
 Shows a \code{Pattern} Object
 }
 \section{Methods}{
-  \describe{ \item{list("signature(object = \"MarkovChain
-  \")")}{ Shows a \code{Pattern} object. } }
+ \describe{
+
+\item{list("signature(object = \"MarkovChain\")")}{ Shows a \code{Pattern} object. } }
 }
+
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}
 }
 \keyword{methods}
-

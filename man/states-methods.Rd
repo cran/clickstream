@@ -9,18 +9,18 @@
 states(object)
 }
 \arguments{
-  \item{object}{An instance of the \code{MarkovChain}-class}
+\item{object}{An instance of the \code{MarkovChain}-class}
 }
 \description{
 Returns All States
 }
 \section{Methods}{
-  \describe{ \item{list("signature(object = \"MarkovChain
-  \")")}{ Returns the name of all states of a
-  \code{MarkovChain} object. } }
+ \describe{
+
+\item{list("signature(object = \"MarkovChain\")")}{ Returns the name of all states of a \code{MarkovChain} object. } }
 }
+
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}
 }
 \keyword{methods}
-

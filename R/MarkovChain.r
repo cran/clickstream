@@ -242,13 +242,13 @@ setMethod("predict", "MarkovChain",
                           absorbingProbabilities = as.numeric(subset(object@absorbingProbabilities, state ==
                                                                      nextState)[-1]) * absorbingProbabilities
                       }
-                      absorbingProbabilities = absorbingProbabilities / sum(absorbingProbabilities)
-                      resultPattern@absorbingProbabilities = as.data.frame(absorbingProbabilities)
                   }
                   if (nextState %in% object@absorbingStates) {
                       break
                   }
               }
+              absorbingProbabilities = absorbingProbabilities / sum(absorbingProbabilities)
+              resultPattern@absorbingProbabilities = as.data.frame(absorbingProbabilities)
               return(resultPattern)
           })
 
@@ -470,3 +470,75 @@ print.MarkovChainSummary = function(x, ...) {
     cat("AIC: ", x$aic, "\n", sep = "")
     cat("BIC: ", x$bic, "\n", sep = "")
 }
+
+#' Plots a Heatmap
+#'
+#' @export
+#' @docType methods
+#' @rdname hmPlot-methods
+#' @aliases hmPlot hmPlot,MarkovChain-method
+#' @param object The \code{MarkovChain} for which a heatmap is
+#' plotted.
+#' @param order Order of the transition matrix that should be plotted. Default is 1.
+#' @param absorptionProbability Should the heatmap show absorption probabilities? Default is FALSE.
+#' @param title Title of the heatmap.
+#' @param lowColor Color for the lowest transition probability of 0. Default is "yellow".
+#' @param highColor Color for the highest transition probability of 1. Default is "red".
+#' @section Methods: \describe{
+#'
+#' \item{list("signature(object = \"MarkovChain\")")}{ Plots a heatmap for a specified transition matrix or
+#' the absorption probability matrix of a given \code{MarkovChain} object. } }
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link{fitMarkovChain}}
+#' @keywords methods
+#' @examples
+#'
+#' # fitting a simple Markov chain and predicting the next click
+#' clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#'                "User2,i,c,i,c,c,c,d",
+#'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
+#'                "User4,c,c,p,c,d",
+#'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
+#'                "User6,i,h,c,c,p,p,c,p,c,d")
+#' csf <- tempfile()
+#' writeLines(clickstreams, csf)
+#' cls <- readClickstreams(csf, header = TRUE)
+#' mc <- fitMarkovChain(cls)
+#' hmPlot(mc)
+#'
+setGeneric("hmPlot", function(object, order = 1, absorptionProbability = FALSE, title = NA, lowColor = "yellow", highColor = "red")
+    standardGeneric("hmPlot"))
+setMethod("hmPlot", "MarkovChain", 
+          function(object, order = 1, absorptionProbability = FALSE, title = NA, lowColor = "yellow", highColor = "red") {
+            if (absorptionProbability) {
+                transitions <- melt(object@absorbingProbabilities, id.vars = "state")
+                df <- data.frame(from = transitions[,1], to = transitions[,2], value = transitions[,3])
+                p <- ggplot(df, aes(df$to, df$from)) + geom_tile(aes(fill = df$value), color = "white") 
+                if (!is.na(title)) {
+                    p <- p + ggtitle(title)
+                    p <- p + theme(plot.title = element_text(hjust = 0.5))
+                }
+                p <- p + scale_fill_gradient("Transition Probability\n", low = lowColor, high = highColor)
+                p <- p + ylab("From") + xlab("To")
+                print(p)
+            } else {
+                if (order == 0) {
+                    stop("It is not possible to plot a heatmap for order 0.")
+                } else if (order > object@order) {
+                    stop("Heatmap order is higher than the order of the markov chain.")
+                } else {
+                    transitions <- melt(object@transitions[[order]], id.vars = NULL)
+                    to <- rep(names(object@transitions[[order]]), rep(length(names(object@transitions[[order]]))))
+                    df <- data.frame(from = transitions[,1], to = to, value = transitions[,2])
+                    p <- ggplot(df, aes(df$to, df$from)) + geom_tile(aes(fill = df$value), color = "white") 
+                    if (!is.na(title)) {
+                        p <- p + ggtitle(title)
+                        p <- p + theme(plot.title = element_text(hjust = 0.5))
+                    }
+                    p <- p + scale_fill_gradient("Transition Probability\n", low = lowColor, high = highColor)
+                    p <- p + ylab("From") + xlab("To")
+                    print(p)
+                }
+            }
+        }
+)

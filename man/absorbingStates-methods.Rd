@@ -9,18 +9,19 @@
 absorbingStates(object)
 }
 \arguments{
-  \item{object}{An instance of the \code{MarkovChain}-class}
+\item{object}{An instance of the \code{MarkovChain}-class}
 }
 \description{
 Returns All Absorbing States
 }
 \section{Methods}{
-  \describe{ \item{list("signature(object = \"MarkovChain
-  \")")}{ Returns the names of all states that never have a
-  successor in a clickstream (i.e. that are absorbing).} }
+ \describe{
+
+\item{list("signature(object = \"MarkovChain\")")}{ Returns the names of all states that never have a successor
+in a clickstream (i.e. that are absorbing).} }
 }
+
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}
 }
 \keyword{methods}
-

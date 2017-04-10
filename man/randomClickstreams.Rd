@@ -8,19 +8,22 @@ randomClickstreams(states, startProbabilities, transitionMatrix, meanLength,
   n = 100)
 }
 \arguments{
-  \item{states}{Names of all possible states.}
-  \item{startProbabilities}{Start probabilities for all
-  states.} \item{transitionMatrix}{Matrix of transition
-  probabilities.} \item{meanLength}{Average length of the
-  click streams.} \item{n}{Number of click streams to be
-  generated.}
+\item{states}{Names of all possible states.}
+
+\item{startProbabilities}{Start probabilities for all states.}
+
+\item{transitionMatrix}{Matrix of transition probabilities.}
+
+\item{meanLength}{Average length of the click streams.}
+
+\item{n}{Number of click streams to be generated.}
 }
 \value{
 Returns a list of clickstreams.
 }
 \description{
-Generates a list of clickstreams by randomly walking through
-a given transition matrix.
+Generates a list of clickstreams by randomly walking through a given
+transition matrix.
 }
 \examples{
 
@@ -32,12 +35,10 @@ cls <- randomClickstreams(states, startProbabilities, transitionMatrix, meanLeng
 print(cls)
 
 }
+\seealso{
+\code{\link{fitMarkovChain}}, \code{\link{readClickstreams}},
+\code{\link{print.Clickstreams}}
+}
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}
 }
-\seealso{
-\code{\link{fitMarkovChain}},
-\code{\link{readClickstreams}},
-\code{\link{print.Clickstreams}}
-}
-

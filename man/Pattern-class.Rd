@@ -2,22 +2,22 @@
 % Please edit documentation in R/Pattern.r
 \docType{class}
 \name{Pattern-class}
-\alias{+,Pattern,Pattern-method}
 \alias{Pattern-class}
 \alias{Pattern-class,Pattern-method}
+\alias{+,Pattern,Pattern-method}
 \alias{initialize,Pattern-method}
 \alias{show}
 \title{Class \code{"Pattern"}}
 \description{
-This S4 class describes a click pattern consisting of a
-sequence of clicks and a probability of occurrence.
+This S4 class describes a click pattern consisting of a sequence of clicks
+and a probability of occurrence.
 }
 \section{Objects from the Class}{
-  Objects can be created by calls of the form
-  \code{new("Pattern", sequence, probability, ...)}. This S4
-  class describes a click pattern consisting of a sequence of
-  clicks and a probability of occurrence.
+ Objects can be created by calls of the form
+\code{new("Pattern", sequence, probability, ...)}. This S4 class describes a click pattern consisting of a sequence of clicks
+and a probability of occurrence.
 }
+
 \examples{
 
 # show Pattern definition
@@ -29,11 +29,10 @@ pattern2 <- new("Pattern", sequence = c("c", "p", "p"), probability = 0.2)
 pattern3 <- new("Pattern", sequence = c("h", "p", "p"), probability = 0.35,
         absorbingProbabilities = data.frame(d = 0.6, o = 0.4))
 }
-\author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
-}
 \seealso{
 \code{\link[=MarkovChain-class]{randomClicks}}
 }
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}
 \keyword{classes}
-

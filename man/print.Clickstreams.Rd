@@ -7,8 +7,9 @@
 \method{print}{Clickstreams}(x, ...)
 }
 \arguments{
-  \item{x}{A list of clickstreams.} \item{...}{Ignored
-  parameters.}
+\item{x}{A list of clickstreams.}
+
+\item{...}{Ignored parameters.}
 }
 \description{
 Prints a \code{Clickstreams} object
@@ -27,11 +28,9 @@ cls <- readClickstreams(csf, header = TRUE)
 print(cls)
 
 }
+\seealso{
+\code{\link{readClickstreams}}, \code{\link{randomClickstreams}}
+}
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}
 }
-\seealso{
-\code{\link{readClickstreams}},
-\code{\link{randomClickstreams}}
-}
-

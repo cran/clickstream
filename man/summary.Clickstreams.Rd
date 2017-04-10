@@ -7,9 +7,9 @@
 \method{summary}{Clickstreams}(object, ...)
 }
 \arguments{
-  \item{object}{A \code{Clickstreams} object (see
-  \code{\link{readClickstreams}}).} \item{...}{Ignored
-  parameters.}
+\item{object}{A \code{Clickstreams} object (see \code{\link{readClickstreams}}).}
+
+\item{...}{Ignored parameters.}
 }
 \description{
 Prints a summary of a \code{Clickstreams} object.
@@ -28,11 +28,9 @@ cls <- readClickstreams(csf, header = TRUE)
 summary(cls)
 
 }
+\seealso{
+\code{\link{readClickstreams}}, \code{\link{randomClickstreams}}
+}
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}
 }
-\seealso{
-\code{\link{readClickstreams}},
-\code{\link{randomClickstreams}}
-}
-

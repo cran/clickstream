@@ -7,14 +7,13 @@
 as.transactions(clickstreamList)
 }
 \arguments{
-  \item{clickstreamList}{A list of clickstreams.}
+\item{clickstreamList}{A list of clickstreams.}
 }
 \value{
 An instance of the class \code{\link[arules]{transactions}}
 }
 \description{
-Coerces a \code{Clickstream} object to a \code{transactions}
-object.
+Coerces a \code{Clickstream} object to a \code{transactions} object.
 }
 \examples{
 
@@ -30,10 +29,9 @@ cls <- readClickstreams(csf, header = TRUE)
 trans <- as.transactions(cls)
 
 }
-\author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
-}
 \seealso{
 \code{\link{frequencies}}
 }
-
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}

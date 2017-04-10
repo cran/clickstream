@@ -9,30 +9,29 @@
 \S4method{summary}{MarkovChain}(object)
 }
 \arguments{
-  \item{object}{An instance of the \code{MarkovChain}-class}
+\item{object}{An instance of the \code{MarkovChain}-class}
 }
 \value{
 Returns a \code{MarkovChainSummary} object.
-\item{list("desc")}{A short description of the
-\code{MarkovChain} object.} \item{list("observations")}{The
-number of observations from which the \code{MarkovChain}
-has been fitted.} \item{list("k")}{The number of estimation
-parameters.} \item{list("logLikelihood")}{The maximal
-log-likelihood of the \code{MarkovChain} estimation.}
-\item{list("aic")}{Akaike's Information Criterion for the
-\code{MarkovChain} object} \item{list("bic")}{Bayesian
+
+\item{list("desc")}{A short description of the \code{MarkovChain} object.}
+\item{list("observations")}{The number of observations from which the
+\code{MarkovChain} has been fitted.} \item{list("k")}{The number of
+estimation parameters.} \item{list("logLikelihood")}{The maximal log-likelihood of
+the \code{MarkovChain} estimation.} \item{list("aic")}{Akaike's Information
+Criterion for the \code{MarkovChain} object} \item{list("bic")}{Bayesian
 Information Criterion for the \code{MarkovChain} object}
 }
 \description{
 Prints the Summary of a MarkovChain Object
 }
 \section{Methods}{
-  \describe{ \item{list("signature(object = \"MarkovChain
-  \")")}{ Generates a summary for a given \code{MarkovChain}
-  object } }
+ \describe{
+
+\item{list("signature(object = \"MarkovChain\")")}{ Generates a summary for a given \code{MarkovChain} object } }
 }
+
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}
 }
 \keyword{methods}
-

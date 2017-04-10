@@ -7,30 +7,31 @@
 clusterClickstreams(clickstreamList, order = 0, centers, ...)
 }
 \arguments{
-  \item{clickstreamList}{A list of clickstreams for which
-  the cluster analysis is performed.} \item{order}{The order
-  of the transition matrices used as input for clustering
-  (default is 0; 0 and 1 are possible).} \item{centers}{The
-  number of clusters.} \item{...}{Additional parameters for k-
-  means clustering (see \code{\link{kmeans}}).}
+\item{clickstreamList}{A list of clickstreams for which the cluster analysis
+is performed.}
+
+\item{order}{The order of the transition matrices used as input for
+clustering (default is 0; 0 and 1 are possible).}
+
+\item{centers}{The number of clusters.}
+
+\item{...}{Additional parameters for k-means clustering (see
+\code{\link{kmeans}}).}
 }
 \value{
-This method returns a \code{ClickstreamClusters} object
-(S3-class). It is a list with the following components:
-\item{clusters}{ The resulting list of \code{Clickstreams}
-objects.} \item{centers}{ A matrix of cluster centres. }
-\item{states}{ Vector of states} \item{totss}{ The total
-sum of squares. } \item{withinss}{ Vector of within-
-cluster sum of squares, one component per cluster. }
-\item{tot.withinss}{ Total within-cluster sum of squares,
-i.e., \code{sum(withinss)}. } \item{betweenss}{ The between-
-cluster sum of squares, i.e., \code{totss - tot.withinss}. }
+This method returns a \code{ClickstreamClusters} object (S3-class).
+It is a list with the following components: \item{clusters}{ The resulting list of
+\code{Clickstreams} objects.}
+\item{centers}{ A matrix of cluster centres.  } \item{states}{ Vector of states} 
+\item{totss}{ The total sum of squares.  } \item{withinss}{ Vector of within-cluster 
+sum of squares, one component per cluster.  } \item{tot.withinss}{ Total within-cluster sum of
+squares, i.e., \code{sum(withinss)}.  } \item{betweenss}{ The
+between-cluster sum of squares, i.e., \code{totss - tot.withinss}.  }
 }
 \description{
-Performs k-means clustering on a list of clickstreams. For
-each clickstream a transition matrix of a given order is
-computed. These transition matrices are used as input for
-performing k-means clustering.
+Performs k-means clustering on a list of clickstreams. For each clickstream a
+transition matrix of a given order is computed. These transition matrices
+are used as input for performing k-means clustering.
 }
 \examples{
 
@@ -47,11 +48,10 @@ clusters <- clusterClickstreams(cls, order = 0, centers = 2)
 print(clusters)
 
 }
-\author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
-}
 \seealso{
 \code{\link{print.ClickstreamClusters}},
 \code{\link{summary.ClickstreamClusters}}
 }
-
+\author{
+Michael Scholz \email{michael.scholz@uni-passau.de}
+}
