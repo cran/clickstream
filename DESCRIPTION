@@ -1,8 +1,8 @@
 Package: clickstream
 Type: Package
 Title: Analyzes Clickstreams Based on Markov Chains
-Version: 1.2.0
-Date: 2017-04-10
+Version: 1.2.1
+Date: 2017-05-18
 Author: Michael Scholz
 Maintainer: Michael Scholz <michael.scholz@uni-passau.de>
 Description: A set of tools to read, analyze and write lists of click sequences
@@ -12,11 +12,11 @@ Description: A set of tools to read, analyze and write lists of click sequences
 License: GPL-2
 Depends: R (>= 3.0.1), methods, igraph, stats, utils, reshape2,
         data.table
-Imports: plyr, Rsolnp, arules, linprog, ggplot2
+Imports: plyr, Rsolnp, arules, linprog, ggplot2, ClickClust
 LazyLoad: yes
 ByteCompile: yes
 RoxygenNote: 6.0.1
 NeedsCompilation: no
-Packaged: 2017-04-10 10:54:39 UTC; micha
+Packaged: 2017-05-18 11:49:05 UTC; micha
 Repository: CRAN
-Date/Publication: 2017-04-10 11:45:19 UTC
+Date/Publication: 2017-05-18 13:48:35 UTC

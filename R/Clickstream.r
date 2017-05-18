@@ -502,3 +502,33 @@ as.transactions = function(clickstreamList) {
     itemInfo(tr)$labels = itemInfo(tr)$levels 
     return(tr)
 }
+
+
+#' Coerces a Clickstream Object to a ClickClust Object
+#'
+#' Coerces a \code{Clickstream} object to a \code{ClickClust} object.
+#'
+#'
+#' @param clickstreamList A list of clickstreams.
+#' @return A list consisting of a dataset X and a vector of initial states y
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link{frequencies}}
+#' @examples
+#'
+#' clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#'                "User2,i,c,i,c,c,c,d",
+#'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
+#'                "User4,c,c,p,c,d",
+#'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
+#'                "User6,i,h,c,c,p,p,c,p,c,d")
+#' csf <- tempfile()
+#' writeLines(clickstreams, csf)
+#' cls <- readClickstreams(csf, header = TRUE)
+#' X <- as.ClickClust(cls)
+#'
+#' @export as.ClickClust
+as.ClickClust = function(clickstreamList) {
+    S = llply(.data = clickstreamList, .fun = function(x) {as.numeric(as.factor(x))})
+    X = click.read(S)
+    return(X)
+}

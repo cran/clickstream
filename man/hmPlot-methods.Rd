@@ -7,7 +7,7 @@
 \title{Plots a Heatmap}
 \usage{
 hmPlot(object, order = 1, absorptionProbability = FALSE, title = NA,
-  lowColor = "yellow", highColor = "red")
+  lowColor = "yellow", highColor = "red", flip = FALSE)
 }
 \arguments{
 \item{object}{The \code{MarkovChain} for which a heatmap is
@@ -22,6 +22,8 @@ plotted.}
 \item{lowColor}{Color for the lowest transition probability of 0. Default is "yellow".}
 
 \item{highColor}{Color for the highest transition probability of 1. Default is "red".}
+
+\item{flip}{Flip to horizontal plot. Default is FALSE.}
 }
 \description{
 Plots a Heatmap

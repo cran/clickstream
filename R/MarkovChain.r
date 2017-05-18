@@ -484,6 +484,7 @@ print.MarkovChainSummary = function(x, ...) {
 #' @param title Title of the heatmap.
 #' @param lowColor Color for the lowest transition probability of 0. Default is "yellow".
 #' @param highColor Color for the highest transition probability of 1. Default is "red".
+#' @param flip Flip to horizontal plot. Default is FALSE.
 #' @section Methods: \describe{
 #'
 #' \item{list("signature(object = \"MarkovChain\")")}{ Plots a heatmap for a specified transition matrix or
@@ -506,10 +507,10 @@ print.MarkovChainSummary = function(x, ...) {
 #' mc <- fitMarkovChain(cls)
 #' hmPlot(mc)
 #'
-setGeneric("hmPlot", function(object, order = 1, absorptionProbability = FALSE, title = NA, lowColor = "yellow", highColor = "red")
+setGeneric("hmPlot", function(object, order = 1, absorptionProbability = FALSE, title = NA, lowColor = "yellow", highColor = "red", flip = FALSE)
     standardGeneric("hmPlot"))
 setMethod("hmPlot", "MarkovChain", 
-          function(object, order = 1, absorptionProbability = FALSE, title = NA, lowColor = "yellow", highColor = "red") {
+          function(object, order = 1, absorptionProbability = FALSE, title = NA, lowColor = "yellow", highColor = "red", flip = FALSE) {
             if (absorptionProbability) {
                 transitions <- melt(object@absorbingProbabilities, id.vars = "state")
                 df <- data.frame(from = transitions[,1], to = transitions[,2], value = transitions[,3])
@@ -520,6 +521,10 @@ setMethod("hmPlot", "MarkovChain",
                 }
                 p <- p + scale_fill_gradient("Transition Probability\n", low = lowColor, high = highColor)
                 p <- p + ylab("From") + xlab("To")
+                p <- p + theme(axis.text.x = element_text(angle = 90))
+                if (flip) {
+                    p <- p + coord_flip()
+                }
                 print(p)
             } else {
                 if (order == 0) {
@@ -537,6 +542,10 @@ setMethod("hmPlot", "MarkovChain",
                     }
                     p <- p + scale_fill_gradient("Transition Probability\n", low = lowColor, high = highColor)
                     p <- p + ylab("From") + xlab("To")
+                    p <- p + theme(axis.text.x = element_text(angle = 90))
+                    if (flip) {
+                        p <- p + coord_flip()
+                    }
                     print(p)
                 }
             }
