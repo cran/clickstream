@@ -34,6 +34,9 @@ mcEvaluate = function(mc, startPattern, testCLS){
       totalclicks = "numeric",
       observed = "numeric",
       expected = "numeric",
+      residual = "numeric",
+      residualSquared = "numeric",
+      component = "numeric",
       predictedNextClick = "character",
       patternSequence = "character",
       probability = "numeric"
@@ -61,8 +64,14 @@ mcEvaluate = function(mc, startPattern, testCLS){
     vec_observed <- append(vec_observed, obs)
   }
   TotalExpectded <- sum(vec_totalPages) * expec
+  observed = sum(vec_observed)
+  expected = TotalExpectded
+  residual = observed-expected
+  residualSquared = residual^2
+  component = residualSquared/expected
   result = new(
-    "Result", expected = TotalExpectded, observed = sum(vec_observed),
+    "Result", expected = expected, observed = observed, residual = residual,
+    residualSquared = residualSquared, component = component,
     predictedNextClick = predicted, patternSequence = pattern, totalclicks = sum(vec_totalPages),
     probability = expec
   )
@@ -101,8 +110,8 @@ mcEvaluate = function(mc, startPattern, testCLS){
 #' write.csv(res, file = "results.csv")
 
 
-mcEvaluateAll = function(mc, testCLS, trainingCLS, ord=1){
-  results <- data.frame( "totalclicks" = character(), "observed" = character(), "expected" = character(), "predictedNextClick" = character(), "patternSequence" = character(), "probability" = character(),  stringsAsFactors=FALSE)
+mcEvaluateAll = function(mc, testCLS, trainingCLS, includeChiSquare = TRUE, returnChiSquareOnly = FALSE){
+  results <- data.frame( "totalclicks" = character(), "observed" = character(), "expected" = character(), "residual" = character(), "residualSquared" = character(), "component" = numeric(), "predictedNextClick" = character(), "patternSequence" = character(), "probability" = character(),  stringsAsFactors=FALSE)
   vec<-unlist(trainingCLS)
   dedupe <- vec[which(!duplicated(vec))]
   for (d in dedupe){
@@ -111,10 +120,17 @@ mcEvaluateAll = function(mc, testCLS, trainingCLS, ord=1){
       startPattern <- new("Pattern", sequence = c(value)) 
       res <- mcEvaluate(mc, startPattern, testCLS)
       if (res@totalclicks != 0 && res@expected > 0){
-        vec_results <- c(res@totalclicks, res@observed, res@expected, res@patternSequence, res@predictedNextClick,res@probability)
-        results[nrow(results) + 1, ] <- c(res@totalclicks, res@observed, res@expected, res@predictedNextClick, res@patternSequence, res@probability)
+        vec_results <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@patternSequence, res@predictedNextClick,res@probability)
+        results[nrow(results) + 1, ] <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@predictedNextClick, res@patternSequence, res@probability)
       }
     }
+  }
+  ChiSquare <- sum(as.numeric(results$component))
+  if (includeChiSquare == TRUE){
+    results[nrow(results) + 1, ] <- c(0, 0, 0, 0, "Chi-Square:", ChiSquare, 0, 0, 0)
+  }
+  if (returnChiSquareOnly == TRUE){
+    results <- ChiSquare
   }
   return(results)
 }
@@ -153,8 +169,8 @@ mcEvaluateAll = function(mc, testCLS, trainingCLS, ord=1){
 #' res <- mcEvaluateAllClusters(markovchains, clusters, testCLS, trainingCLS)
 #' write.csv(res, file = "results.csv")
 
-mcEvaluateAllClusters = function(markovchains, clusters, testCLS, trainingCLS){
-  results <- data.frame( "totalclicks" = character(), "observed" = character(), "expected" = character(), "predictedNextClick" = character(), "patternSequence" = character(), "probability" = character(),  stringsAsFactors=FALSE)
+mcEvaluateAllClusters = function(markovchains, clusters, testCLS, trainingCLS, includeChiSquare = TRUE, returnChiSquareOnly = FALSE){
+  results <- data.frame( "totalclicks" = character(), "observed" = character(), "expected" = character(), "residual" = character(), "residualSquared" = character(), "component" = numeric(), "predictedNextClick" = character(), "patternSequence" = character(), "probability" = character(),  stringsAsFactors=FALSE)
   vec<-unlist(trainingCLS)
   dedupe <- vec[which(!duplicated(vec))]
   for (d in dedupe){
@@ -164,10 +180,17 @@ mcEvaluateAllClusters = function(markovchains, clusters, testCLS, trainingCLS){
       mc <- getOptimalMarkovChain(startPattern,markovchains,clusters)
       res <- mcEvaluate(mc, startPattern, testCLS)
       if (res@totalclicks != 0){
-        vec_results <- c(res@totalclicks, res@observed, res@expected, res@patternSequence, res@predictedNextClick,res@probability)
-        results[nrow(results) + 1, ] <- c(res@totalclicks, res@observed, res@expected, res@predictedNextClick, res@patternSequence, res@probability)
+        vec_results <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@patternSequence, res@predictedNextClick,res@probability)
+        results[nrow(results) + 1, ] <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@predictedNextClick, res@patternSequence, res@probability)
       }
     }
+  }
+  ChiSquare <- sum(as.numeric(results$component))
+  if (includeChiSquare == TRUE){
+    results[nrow(results) + 1, ] <- c(0, 0, 0, 0, "Chi-Square:", ChiSquare, 0, 0, 0)
+  }
+  if (returnChiSquareOnly == TRUE){
+    results <- ChiSquare
   }
   return(results)
 }
