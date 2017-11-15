@@ -56,7 +56,7 @@ getOptimalMarkovChain =function(startPattern, markovchains, clusters) {
 #' generates an optimal set of clusters for a clickstream based on certain constraints.
 #'
 #' @export
-#' @description this is an experimental function which allows clustering based on targetting an average figure for next click probabilities derived when fitting each cluster to a markov chain. The user can either 
+#' @description this is an experimental function which allows consensus clustering based on targetting an average figure for next click probabilities derived when fitting each cluster to a markov chain. The user can either 
 #' @param cls The clickstream
 #' @param maxIterations number of times to iterate (repeat) through the k-means clustering.
 #' @param optimalProbMean The target average probability of each next page click prediction in a 1st order markov chain
@@ -83,27 +83,18 @@ getOptimalMarkovChain =function(startPattern, markovchains, clusters) {
 #' cls <- readClickstreams(csf, header = TRUE)
 #' cls
 #' 
-#' cluster <- getOptimalClusters(cls, centresMax = 3, order = 1)
-#' markovchains <- fitMarkovChains(cluster) 
-#' startPattern <- new("Pattern", sequence = c("H")) 
-#' predictFromMarkovChains(startPattern,markovchains,cluster)
+#' clusters <- getConsensusClusters(cls, centresMax = 3, order = 1)
+#' markovchains <- fitMarkovChains(clusters) 
+#' startPattern <- new("Pattern", sequence = c("h")) 
+#' mc <- getOptimalMarkovChain(startPattern, markovchains, clusters)
+#' predict(mc, startPattern)
 
-getOptimalClusters = function(cls, maxIterations=10, optimalProbMean=0.60, range=0.055, divisor=1000, order=1, clusterCentresRange=0, takeHighest=TRUE){
-  vectorOfClickstreamLengths <- NULL
-  for(i in cls){
-    vectorOfClickstreamLengths <- append(vectorOfClickstreamLengths, length(i))
-  }
-  clicks <- sum(vectorOfClickstreamLengths)
-  clicks <- clicks/divisor
-  clicks <- floor(clicks)
-  centresMin <- clicks
+getConsensusClusters = function(trainingCLS, testCLS, maxIterations=10, optimalProbMean=0.40, range=0.10, centresMin=2, order=1, clusterCentresRange=0, takeHighest=TRUE){
+  cls <- trainingCLS
   vec<-unlist(cls)
   dedupe <- vec[which(!duplicated(vec))]
-  if (centresMin > length(dedupe)){
-    centresMin = length(dedupe)
-  }
   centresMax <- centresMin + clusterCentresRange
-  clusterOfClusters <- list()
+  listOfClusters <- list()
   clusterCentres <- centresMin:centresMax
   iterations <- 1:maxIterations
   vectorOfAllProbsMeans <-NULL
@@ -116,6 +107,7 @@ getOptimalClusters = function(cls, maxIterations=10, optimalProbMean=0.60, range
       clusters <- clusterClickstreams(cls, centers = c) 
       markovchains <- fitMarkovChains(clusters, order = order) 
       vectorOfProbs <-NULL
+      print("starting next page probability aggregation....")
       for (d in dedupe){
         if(d !="Defer"){
           value <- d[[1]]
@@ -126,31 +118,43 @@ getOptimalClusters = function(cls, maxIterations=10, optimalProbMean=0.60, range
         }
       }
       vectorOfAllProbsMeans <- append(vectorOfAllProbsMeans, mean(vectorOfProbs))
-      clusterOfClusters <- list.append(clusterOfClusters, clusters)
+      listOfClusters <- list.append(listOfClusters, clusters)
     }
     print(vectorOfAllProbsMeans)
-    indexOfHighestProbs <- which(vectorOfAllProbsMeans>optimalProbMean & vectorOfAllProbsMeans < limit)
-    print(indexOfHighestProbs)
-    #return the best set of clusters
-    if (takeHighest != TRUE){
-      if (length(indexOfHighestProbs) > 0){
-        break
-      }
-    }
+    candidates <- which(vectorOfAllProbsMeans>optimalProbMean & vectorOfAllProbsMeans < limit)
+    cat("candidates are: ",candidates,"\n")
   }
   if (takeHighest != TRUE){
-    if (length(indexOfHighestProbs) > 0){
-      return(clusterOfClusters[[indexOfHighestProbs]])
+    if (length(candidates) > 0){
+      #get the candidate clusters into a vector
+      candidateClusters <- list()
+      for (i in candidates){
+        cat("i is: ",i,"\n")
+        clusters <- listOfClusters[[i]]
+        candidateClusters <- list.append(candidateClusters,clusters)
+      }
+      print("Evaluating candidate models.....")
+      vec_variances <- NULL
+      for(c in candidateClusters){
+        markovchains <- fitMarkovChains(c) 
+        variance <- mcEvaluateAllClusters(markovchains,c,testCLS,trainingCLS,returnChiSquareOnly = TRUE)
+        cat("variance is....",variance,"\n")
+        vec_variances <- append(vec_variances,variance)
+      }
+      cat("vec_variances is: ",vec_variances,"\n")
+      winner <- which(vec_variances==min(vec_variances))
+      cat("winner is: ",winner,"\n")
+      return(candidateClusters[[winner]])
     }
     else{
-      stop(("target prediction accuracy was not reached with the given number of iterations"))
+      stop(("target range was not reached with the given number of iterations"))
     }
   }
   else{
-    if (length(indexOfHighestProbs) == 0){
+    if (length(candidates) == 0){
       warning("target prediction accuracy was not reached with the given number of iterations. Taking highest probability mean")
     }
-    indexOfHighestProbs <- which(vectorOfAllProbsMeans==max(vectorOfAllProbsMeans))
-    return(clusterOfClusters[[indexOfHighestProbs]])
+    candidates <- which(vectorOfAllProbsMeans==max(vectorOfAllProbsMeans))
+    return(listOfClusters[[candidates]])
   }
 }
