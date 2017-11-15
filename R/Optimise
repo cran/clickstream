@@ -129,7 +129,6 @@ getConsensusClusters = function(trainingCLS, testCLS, maxIterations=10, optimalP
       #get the candidate clusters into a vector
       candidateClusters <- list()
       for (i in candidates){
-        cat("i is: ",i,"\n")
         clusters <- listOfClusters[[i]]
         candidateClusters <- list.append(candidateClusters,clusters)
       }
