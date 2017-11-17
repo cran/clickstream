@@ -127,7 +127,7 @@ mcEvaluateAll = function(mc, testCLS, trainingCLS, includeChiSquare = TRUE, retu
   }
   ChiSquare <- sum(as.numeric(results$component))
   if (includeChiSquare == TRUE){
-    results[nrow(results) + 1, ] <- c(0, 0, 0, 0, "Chi-Square:", ChiSquare, 0, 0, 0)
+    results[nrow(results) + 1, ] <- c(0, 0, 0, 0, "variance:", ChiSquare, 0, 0, 0)
   }
   if (returnChiSquareOnly == TRUE){
     results <- ChiSquare
@@ -187,7 +187,7 @@ mcEvaluateAllClusters = function(markovchains, clusters, testCLS, trainingCLS, i
   }
   ChiSquare <- sum(as.numeric(results$component))
   if (includeChiSquare == TRUE){
-    results[nrow(results) + 1, ] <- c(0, 0, 0, 0, "Chi-Square:", ChiSquare, 0, 0, 0)
+    results[nrow(results) + 1, ] <- c(0, 0, 0, 0, "variance:", ChiSquare, 0, 0, 0)
   }
   if (returnChiSquareOnly == TRUE){
     results <- ChiSquare
