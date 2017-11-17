@@ -56,13 +56,13 @@ getOptimalMarkovChain =function(startPattern, markovchains, clusters) {
 #' generates an optimal set of clusters for a clickstream based on certain constraints.
 #'
 #' @export
-#' @description this is an experimental function which allows consensus clustering based on targetting an average figure for next click probabilities derived when fitting each cluster to a markov chain. The user can either 
+#' @description this is an experimental function for a consensus clustering algorithm based on targetting a range of average next state probabilities derived when fitting each cluster to a markov chain. 
 #' @param cls The clickstream
 #' @param maxIterations number of times to iterate (repeat) through the k-means clustering.
 #' @param optimalProbMean The target average probability of each next page click prediction in a 1st order markov chain
 #' @param range the range above the optimal probability to target. 
+#' @param centresMin the minimum cluster centres to evaluate
 #' @param clusterCentresRange the additional cluster centres to evaluate
-#' @param divisor the number by which to divide the total number of clicks (determines how many cluster centres to start with)
 #' @param takeHighest determines whether to default to the highest mean next click probability, or error if the target is not reached after the given number of k-means iterations 
 #' @param order The order for markov chains that will be used to evaluate each cluster
 #' 
@@ -83,13 +83,13 @@ getOptimalMarkovChain =function(startPattern, markovchains, clusters) {
 #' cls <- readClickstreams(csf, header = TRUE)
 #' cls
 #' 
-#' clusters <- getConsensusClusters(cls, centresMax = 3, order = 1)
+#' clusters <- getConsensusClusters(trainingCLS, testCLS, maxIterations=20, optimalProbMean=0.50, range = 0.40, centresMin = 2, clusterCentresRange = 4, order = 1, takeHighest=FALSE)
 #' markovchains <- fitMarkovChains(clusters) 
 #' startPattern <- new("Pattern", sequence = c("h")) 
 #' mc <- getOptimalMarkovChain(startPattern, markovchains, clusters)
 #' predict(mc, startPattern)
 
-getConsensusClusters = function(trainingCLS, testCLS, maxIterations=10, optimalProbMean=0.40, range=0.10, centresMin=2, order=1, clusterCentresRange=0, takeHighest=TRUE){
+getConsensusClusters = function(trainingCLS, testCLS, maxIterations=10, optimalProbMean=0.50, range=0.30, centresMin=2, order=1, clusterCentresRange=0, takeHighest=FALSE){
   cls <- trainingCLS
   vec<-unlist(cls)
   dedupe <- vec[which(!duplicated(vec))]
@@ -132,7 +132,7 @@ getConsensusClusters = function(trainingCLS, testCLS, maxIterations=10, optimalP
         clusters <- listOfClusters[[i]]
         candidateClusters <- list.append(candidateClusters,clusters)
       }
-      print("Evaluating candidate models.....")
+      print("Evaluating candidates.....")
       vec_variances <- NULL
       for(c in candidateClusters){
         markovchains <- fitMarkovChains(c) 
@@ -140,7 +140,7 @@ getConsensusClusters = function(trainingCLS, testCLS, maxIterations=10, optimalP
         cat("variance is....",variance,"\n")
         vec_variances <- append(vec_variances,variance)
       }
-      cat("vec_variances is: ",vec_variances,"\n")
+      cat("vector of variances is: ",vec_variances,"\n")
       winner <- which(vec_variances==min(vec_variances))
       cat("winner is: ",winner,"\n")
       return(candidateClusters[[winner]])
@@ -151,7 +151,7 @@ getConsensusClusters = function(trainingCLS, testCLS, maxIterations=10, optimalP
   }
   else{
     if (length(candidates) == 0){
-      warning("target prediction accuracy was not reached with the given number of iterations. Taking highest probability mean")
+      warning("target range was not reached with the given number of iterations. Taking highest probability mean")
     }
     candidates <- which(vectorOfAllProbsMeans==max(vectorOfAllProbsMeans))
     return(listOfClusters[[candidates]])
