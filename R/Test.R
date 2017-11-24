@@ -78,9 +78,40 @@ mcEvaluate = function(mc, startPattern, testCLS){
   return(result)
 }
 
-#' evaluates all next page clicks in a clickstream training data set 
-#' against the test data on the basis of a 1st Order Markov chain
-#' and produces a report of observed and expected values in a matrix
+getNOrderPatterns = function(trainingCLS, order){
+  secondOrder = function(patternlist = NULL){
+    if (is.null(patternlist)){
+      vec<-unlist(trainingCLS)
+      dedupe <- vec[which(!duplicated(vec))]
+    }
+    else{
+      dedupe <- patternlist
+    }
+    listPatterns <- list()
+    OuterlistPatterns <- list()
+    for (a in dedupe){
+      value <- a[[1]]
+      vecPatternsList <- list()
+      for(b in dedupe){
+        vecPattern <- append(value,b)
+        vecPatternsList <- list.append(vecPatternsList, vecPattern)
+      }
+      OuterlistPatterns <- list.append(OuterlistPatterns, vecPatternsList)
+    }
+    OuterlistPatterns <- unlist(OuterlistPatterns, recursive = FALSE)
+  }
+  for(i in 2:order){
+    if(i>2){
+      patternlist <- secondOrder(patternlist=patternlist)
+    }
+    else{
+      patternlist <- secondOrder()
+    }
+  }
+  return(patternlist)
+}
+
+#' evaluates all next page clicks in a clickstream training data set against the test data. Handles higher order by cycling through every possible pattern permutation (uses getNOrderPatterns function to get patterns). Produces a report of observed and expected values in a matrix
 #'
 #' @export
 #' @param mc a markovchain object that corresponds to a list of clusters
@@ -88,14 +119,11 @@ mcEvaluate = function(mc, startPattern, testCLS){
 #' @param testCLS clickstream object with test data 
 #' @param mc the markov chain against which to compare the clickstream data
 #' @examples
-#' training <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
-#'               "User2,i,c,i,c,c,c,d",
-#'               "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
-#'               "User4,c,c,p,c,d")
+#' training <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p",
+#'               "User2,i,c,i,c,c,c,d")
 #' 
-#' test <- c("User1,h,h,h,h,c,c,p,p,h,c,p,p,c,p,p,o",
-#'           "User2,i,c,i,c,c,c,d",
-#'           "User4,c,c,c,c,d,c,c,c,c,c,c,c,c,c,c,c,c,c,c")
+#' test <- c("User1,h,c,c,p,c,h,c,d,p,c,d,p",
+#'              "User2,i,c,i,p,c,c,d")
 #' 
 #' csf <- tempfile()
 #' writeLines(training, csf)
@@ -105,26 +133,33 @@ mcEvaluate = function(mc, startPattern, testCLS){
 #' writeLines(test, csf)
 #' testCLS <- readClickstreams(csf, header = TRUE)
 #' 
-#' mc <- fitMarkovChain(trainingCLS, order = 1)
-#' res <- mcEvaluateAll(mc, testCLS, trainingCLS)
-#' write.csv(res, file = "results.csv")
+#' mc <- fitMarkovChain(trainingCLS, order = 2)
+#' mcEvaluateAll(mc, testCLS, trainingCLS)
 
 
 mcEvaluateAll = function(mc, testCLS, trainingCLS, includeChiSquare = TRUE, returnChiSquareOnly = FALSE){
   results <- data.frame( "totalclicks" = character(), "observed" = character(), "expected" = character(), "residual" = character(), "residualSquared" = character(), "component" = numeric(), "predictedNextClick" = character(), "patternSequence" = character(), "probability" = character(),  stringsAsFactors=FALSE)
-  vec<-unlist(trainingCLS)
-  dedupe <- vec[which(!duplicated(vec))]
-  for (d in dedupe){
-    if(d !="Defer"){
-      value <- d[[1]]
-      startPattern <- new("Pattern", sequence = c(value)) 
-      res <- mcEvaluate(mc, startPattern, testCLS)
-      if (res@totalclicks != 0 && res@expected > 0){
-        vec_results <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@patternSequence, res@predictedNextClick,res@probability)
-        results[nrow(results) + 1, ] <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@predictedNextClick, res@patternSequence, res@probability)
-      }
-    }
+  if(mc@order==1){
+    vec<-unlist(trainingCLS)
+    dedupe <- vec[which(!duplicated(vec))]
   }
+  else{
+    dedupe <-getNOrderPatterns(trainingCLS, order = mc@order)
+  }
+  for (d in dedupe){
+    if(mc@order==1){
+      value <- d[[1]]
+    }
+    else{
+      value <- d
+    }
+    startPattern <- new("Pattern", sequence = c(value)) 
+    res <- mcEvaluate(mc, startPattern, testCLS)
+    if (res@totalclicks != 0 && res@expected > 0){
+      vec_results <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@patternSequence, res@predictedNextClick,res@probability)
+      results[nrow(results) + 1, ] <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@predictedNextClick, res@patternSequence, res@probability)
+    }
+  }   
   ChiSquare <- sum(as.numeric(results$component))
   if (includeChiSquare == TRUE){
     results[nrow(results) + 1, ] <- c(0, 0, 0, 0, "variance:", ChiSquare, 0, 0, 0)
@@ -136,9 +171,7 @@ mcEvaluateAll = function(mc, testCLS, trainingCLS, includeChiSquare = TRUE, retu
 }
 
 
-#' evaluates all next page clicks in a clickstream training data set 
-#' against the test data on the basis of a set of pre-computed 1st Order Markov chains
-#' and corresponding clusters, and produces a report of observed and expected values in a matrix
+#' evaluates all next page clicks in a clickstream training data set against the test data on the basis of a set of pre-computed Markov chains and corresponding clusters. Handles higher order by cycling through every possible pattern permutation (uses getNOrderPatterns function to get patterns). Produces and produces a report of observed and expected values in a matrix
 #'
 #' @export
 #' @param markovchains a list of pre-computed markovchain objects that correspond to a list of clusters
@@ -147,12 +180,12 @@ mcEvaluateAll = function(mc, testCLS, trainingCLS, includeChiSquare = TRUE, retu
 #' @param testCLS clickstream object with test data 
 #' @param mc the markov chain against which to compare the clickstream data
 #' @examples
-#' training <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
-#'               "User2,i,c,i,c,c,c,d",
-#'               "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
-#'               "User4,c,c,p,c,d")
+#' training <- c("User1,h,c,c,p,c,h,c,h,o,p,p,c,p,p,o",
+#'               "User2,i,c,i,c,c,c,o,o,o,i,d",
+#'               "User3,h,i,c,i,c,o,i,p,c,c,p,c,c,i,d",
+#'               "User4,c,c,p,c,d,o,i,h,o,o")
 #' 
-#' test <- c("User1,h,c,c,p,p,h,c,p,p,c,p,p,o",
+#' test <- c("User1,h,c,c,p,p,h,o,i,c,p,p,c,p,p,o",
 #'           "User2,i,c,i,c,c,c,d",
 #'           "User4,c,c,c,c,d")
 #' 
@@ -164,25 +197,32 @@ mcEvaluateAll = function(mc, testCLS, trainingCLS, includeChiSquare = TRUE, retu
 #' writeLines(test, csf)
 #' testCLS <- readClickstreams(csf, header = TRUE)
 #' 
-#' clusters <- clusterClickstreams(trainingCLS, centers = 2)
-#' markovchains <- fitMarkovChains(clusters, order = 1)
-#' res <- mcEvaluateAllClusters(markovchains, clusters, testCLS, trainingCLS)
-#' write.csv(res, file = "results.csv")
+#' clusters <- clusterClickstreams(trainingCLS, centers = 2, order = 1)
+#' markovchains <- fitMarkovChains(clusters, order = 2)
+#' mcEvaluateAllClusters(markovchains, clusters, testCLS, trainingCLS)
 
 mcEvaluateAllClusters = function(markovchains, clusters, testCLS, trainingCLS, includeChiSquare = TRUE, returnChiSquareOnly = FALSE){
   results <- data.frame( "totalclicks" = character(), "observed" = character(), "expected" = character(), "residual" = character(), "residualSquared" = character(), "component" = numeric(), "predictedNextClick" = character(), "patternSequence" = character(), "probability" = character(),  stringsAsFactors=FALSE)
-  vec<-unlist(trainingCLS)
-  dedupe <- vec[which(!duplicated(vec))]
+  if(markovchains[[1]]@order==1){
+    vec<-unlist(trainingCLS)
+    dedupe <- vec[which(!duplicated(vec))]
+  }
+  else{
+    dedupe <-getNOrderPatterns(trainingCLS, order = markovchains[[1]]@order)
+  }   
   for (d in dedupe){
-    if(d !="Defer"){
+    if(markovchains[[1]]@order==1){
       value <- d[[1]]
-      startPattern <- new("Pattern", sequence = c(value)) 
-      mc <- getOptimalMarkovChain(startPattern,markovchains,clusters)
-      res <- mcEvaluate(mc, startPattern, testCLS)
-      if (res@totalclicks != 0){
-        vec_results <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@patternSequence, res@predictedNextClick,res@probability)
-        results[nrow(results) + 1, ] <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@predictedNextClick, res@patternSequence, res@probability)
-      }
+    }
+    else{
+      value <- d
+    }
+    startPattern <- new("Pattern", sequence = c(value)) 
+    mc <- getOptimalMarkovChain(startPattern,markovchains,clusters)
+    res <- mcEvaluate(mc, startPattern, testCLS)
+    if (res@totalclicks != 0){
+      vec_results <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@patternSequence, res@predictedNextClick,res@probability)
+      results[nrow(results) + 1, ] <- c(res@totalclicks, res@observed, res@expected, res@residual, res@residualSquared, res@component, res@predictedNextClick, res@patternSequence, res@probability)
     }
   }
   ChiSquare <- sum(as.numeric(results$component))
