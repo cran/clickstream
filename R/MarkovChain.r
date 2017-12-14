@@ -1,8 +1,7 @@
-#' Class \code{"MarkovChain"}
+#' Class \code{MarkovChain}
 #'
 #' @name MarkovChain-class
-#' @aliases MarkovChain-class,MarkovChain-method plot,MarkovChain-method
-#' show,MarkovChain-method
+#' @aliases MarkovChain-class
 #' @docType class
 #' @section Objects from the Class: Objects can be created by calls of the form
 #' \code{new("MarkovChain", ...)}. This S4 class describes \code{MarkovChain} objects.
@@ -49,8 +48,8 @@ setClass(
 #'
 #' @export
 #' @docType methods
-#' @rdname states-methods
-#' @aliases states states,MarkovChain-method
+#' @rdname states-method
+#' @aliases states,MarkovChain-method
 #' @param object An instance of the \code{MarkovChain}-class
 #' @section Methods: \describe{
 #'
@@ -68,8 +67,8 @@ setMethod("states", "MarkovChain",
 #'
 #' @export
 #' @docType methods
-#' @rdname absorbingStates-methods
-#' @aliases absorbingStates absorbingStates,MarkovChain-method
+#' @rdname absorbingStates-method
+#' @aliases absorbingStates,MarkovChain-method
 #' @param object An instance of the \code{MarkovChain}-class
 #' @section Methods: \describe{
 #'
@@ -88,8 +87,8 @@ setMethod("absorbingStates", "MarkovChain",
 #'
 #' @export
 #' @docType methods
-#' @rdname transientStates-methods
-#' @aliases transientStates transientStates,MarkovChain-method
+#' @rdname transientStates-method
+#' @aliases transientStates,MarkovChain-method
 #' @param object An instance of the \code{MarkovChain}-class
 #' @section Methods: \describe{
 #'
@@ -108,7 +107,7 @@ setMethod("transientStates", "MarkovChain",
 #'
 #' @export
 #' @docType methods
-#' @rdname predict-methods
+#' @rdname predict-method
 #' @aliases predict,MarkovChain-method
 #' @param object The \code{MarkovChain} used for predicting the next
 #' click(s)
@@ -252,16 +251,32 @@ setMethod("predict", "MarkovChain",
               return(resultPattern)
           })
 
+
+#' Plots a \code{MarkovChain} object
+#'
 #' @export
+#' @docType methods
+#' @rdname plot-method
+#' @param x An instance of the \code{MarkovChain}-class
+#' @param order The order of the transition matrix that should be plotted
+#' @param digits The number of digits of the transition probabilities
+#' @param minProbability Only transitions with a probability >= the specified minProbability will be shown
+#' @param ... Further parameters for the \code{plot}-function in package \code{igraph}
+#' @section Methods: \describe{
+#' \item{list("signature(x = \"MarkovChain\", order = \"numeric\", digits = \"numeric\")")}{ Plots the transition matrix with order \code{order} of a \code{MarkovChain} object as graph. } }
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @keywords methods
 setMethod("plot", "MarkovChain",
-          function(x, order = 1, digits = 2, ...) {
+          function(x, order = 1, digits = 2, minProbability = 0, ...) {
               if (x@order == 0) {
-                  plot(x@transitions[[1]]$states, x@transitions[[1]]$probability)
+                  selection = which(x@transitions[[1]]$probability >= minProbability)
+                  plot(x@transitions[[1]]$states[selection], x@transitions[[1]]$probability[selection])
               } else if (order > x@order) {
                   stop("Plotting order is higher than the order of the markov chain.")
               } else {
-                  graph = igraph::graph.adjacency(t(as.matrix(x@transitions[[order]])), weighted =
-                                              T)
+                  transMatrix = t(as.matrix(x@transitions[[order]]))
+                  transMatrix[transMatrix <= minProbability] = 0
+                  graph = igraph::graph.adjacency(transMatrix, weighted =T)
                   edgeLabels = round(igraph::E(graph)$weight, digits)
                   plot(graph, edge.label = edgeLabels, ...)
               }
@@ -271,8 +286,8 @@ setMethod("plot", "MarkovChain",
 #'
 #' @export
 #' @docType methods
-#' @rdname randomClicks-methods
-#' @aliases randomClicks randomClicks,MarkovChain-method
+#' @rdname randomClicks-method
+#' @aliases randomClicks,MarkovChain-method
 #' @param object The \code{MarkovChain} used for generating the next
 #' click(s)
 #' @param startPattern \code{Pattern} containing the first clicks of a user. A
@@ -348,7 +363,16 @@ setMethod("randomClicks", "MarkovChain",
               return(resultPattern)
           })
 
+#' Shows a \code{MarkovChain} object
+#'
 #' @export
+#' @docType methods
+#' @rdname MarkovChain-method
+#' @param object An instance of the \code{MarkovChain}-class
+#' @section Methods: \describe{
+#' \item{list("signature(object = \"MarkovChain\")")}{ Shows an \code{MarkovChain} object. } }
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @keywords methods
 setMethod("show", "MarkovChain", function(object) {
     if (object@order == 0) {
         cat("Zero-Order Markov Chain\n\n")
@@ -383,8 +407,7 @@ setMethod("show", "MarkovChain", function(object) {
 #'
 #' @export
 #' @docType methods
-#' @rdname summary-methods
-#' @aliases summary-methods summary,MarkovChain-method
+#' @rdname summary-method
 #' @param object An instance of the \code{MarkovChain}-class
 #' @return Returns a \code{MarkovChainSummary} object.
 #'
@@ -475,8 +498,8 @@ print.MarkovChainSummary = function(x, ...) {
 #'
 #' @export
 #' @docType methods
-#' @rdname hmPlot-methods
-#' @aliases hmPlot hmPlot,MarkovChain-method
+#' @rdname hmPlot-method
+#' @aliases hmPlot,MarkovChain-method
 #' @param object The \code{MarkovChain} for which a heatmap is
 #' plotted.
 #' @param order Order of the transition matrix that should be plotted. Default is 1.

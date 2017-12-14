@@ -23,7 +23,7 @@ representing the clicks. The name of each list element is either the header
 of a clickstream file or a unique number.
 }
 \description{
-Reads a list of clickstream from a csv-file.
+Reads a list of clickstream from a csv-file. Note that non-alphanumeric characters will be removed.
 }
 \examples{
 

@@ -11,7 +11,7 @@ model clickstreams as zero-order, first-order or higher-order Markov chains.
 }
 \details{
 \tabular{ll}{ Package: \tab clickstream\cr Type: \tab Package\cr Version:
-\tab 1.2.1\cr Date: \tab 2017-05-16\cr License: \tab GPL-2\cr Depends: \tab
+\tab 1.3.0\cr Date: \tab 2017-12-15\cr License: \tab GPL-2\cr Depends: \tab
 R (>= 3.0), methods\cr }
 }
 \examples{
@@ -39,6 +39,8 @@ Ching, W.-K.and Huang, X. and Ng, M.K. and Siu, T.-K. (2013) \emph{Markov Chains
 }
 \author{
 Michael Scholz \email{michael.scholz@uni-passau.de}
+
+Theo van Kraay \email{theo.vankraay@hotmail.com}
 }
 \keyword{Markov}
 \keyword{chain}

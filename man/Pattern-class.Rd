@@ -3,11 +3,7 @@
 \docType{class}
 \name{Pattern-class}
 \alias{Pattern-class}
-\alias{Pattern-class,Pattern-method}
-\alias{+,Pattern,Pattern-method}
-\alias{initialize,Pattern-method}
-\alias{show}
-\title{Class \code{"Pattern"}}
+\title{Class \code{Pattern}}
 \description{
 This S4 class describes a click pattern consisting of a sequence of clicks
 and a probability of occurrence.

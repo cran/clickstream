@@ -3,12 +3,9 @@
 \docType{class}
 \name{MarkovChain-class}
 \alias{MarkovChain-class}
-\alias{MarkovChain-class,MarkovChain-method}
-\alias{plot,MarkovChain-method}
-\alias{show,MarkovChain-method}
-\title{Class \code{"MarkovChain"}}
+\title{Class \code{MarkovChain}}
 \description{
-Class \code{"MarkovChain"}
+Class \code{MarkovChain}
 }
 \section{Objects from the Class}{
  Objects can be created by calls of the form

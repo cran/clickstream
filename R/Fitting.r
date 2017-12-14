@@ -260,7 +260,7 @@ fitMarkovChain=function(clickstreamList, order=1, verbose=TRUE, control=list()) 
     n=sum(lens)
     ratio=length(lens[lens>order])/length(lens)
     if (ratio<0.5) {
-        stop("The order is to high for the specified click streams.")
+        stop("The order is too high for the specified click streams.")
     } else if (ratio<1 && verbose) {        
         warning(paste("Some click streams are shorter than ", order, ".", sep=""))
     } 
@@ -280,7 +280,8 @@ fitMarkovChain=function(clickstreamList, order=1, verbose=TRUE, control=list()) 
     Q=transitions[nonAbsorbingPositions, nonAbsorbingPositions]
     R=transitions[absorbingPositions, nonAbsorbingPositions]
     It=diag(length(nonAbsorbingPositions))
-    N=solve(It-Q)
+    N=ginv(as.matrix(It-Q))
+    # N=solve(It-Q)
     B=N %*% t(R)
     if (length(absorbingStates) > 0) {
         absorbingProbabilities=data.frame(state=names(nonAbsorbingPositions), B/rowSums(B))

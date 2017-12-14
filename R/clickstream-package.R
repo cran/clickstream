@@ -4,22 +4,24 @@
 #' model clickstreams as zero-order, first-order or higher-order Markov chains.
 #' 
 #' \tabular{ll}{ Package: \tab clickstream\cr Type: \tab Package\cr Version:
-#' \tab 1.2.1\cr Date: \tab 2017-05-16\cr License: \tab GPL-2\cr Depends: \tab
+#' \tab 1.3.0\cr Date: \tab 2017-12-15\cr License: \tab GPL-2\cr Depends: \tab
 #' R (>= 3.0), methods\cr }
 #' 
 #' @name clickstream-package
 #' @aliases clickstream-package clickstream
 #' @docType package
 #' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Theo van Kraay \email{theo.vankraay@@hotmail.com}
 #' @references Scholz, M. (2016) R Package clickstream: Analyzing Clickstream Data with Markov Chains, \emph{Journal of Statistical Software}, \bold{74}, 4, pages 1--17 .
 #' 
 #' Ching, W.-K.and Huang, X. and Ng, M.K. and Siu, T.-K. (2013) \emph{Markov Chains -- Models, Algorithms and Applications}, 2nd edition, New York: Springer-Verlag.
-#' @import methods Rsolnp arules plyr linprog ggplot2 ClickClust
-#' @importFrom stats runif rpois kmeans cor
+#' @import methods Rsolnp arules plyr linprog ggplot2 ClickClust parallel
+#' @importFrom stats runif rpois kmeans cor pchisq
 #' @importFrom utils read.table write.table count.fields
 #' @importFrom igraph E graph.adjacency
 #' @importFrom reshape2 melt
 #' @importFrom data.table data.table dcast.data.table
+#' @importFrom MASS ginv
 #' @keywords click stream Markov chain
 #' @examples
 #' 

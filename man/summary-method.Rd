@@ -3,7 +3,6 @@
 \docType{methods}
 \name{summary,MarkovChain-method}
 \alias{summary,MarkovChain-method}
-\alias{summary-methods}
 \title{Prints the Summary of a MarkovChain Object}
 \usage{
 \S4method{summary}{MarkovChain}(object)

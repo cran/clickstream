@@ -1,6 +1,6 @@
 #' Reads a List of Clickstreams from File
 #'
-#' Reads a list of clickstream from a csv-file.
+#' Reads a list of clickstream from a csv-file. Note that non-alphanumeric characters will be removed.
 #'
 #'
 #' @param file The name of the file which the clickstreams are to be read from.
@@ -41,9 +41,13 @@ readClickstreams = function(file, sep = ",", header = FALSE) {
         dat = dat[,-1]
     }
     
-    ddat = data.table(dat)
-    len = length(dat[,1])
+    dat2 = as.data.frame(gsub("[^[:alnum:]]", "", as.matrix(dat)))
+    colnames(dat2) = colnames(dat)
+    rownames(dat2) = rownames(dat)
     rm(dat)
+    ddat = data.table(dat2)
+    len = length(dat2[,1])
+    rm(dat2)
     ldat = as.list(as.data.frame(t(ddat)))
     ldat = llply(
         .data = ldat, .fun = function(x)

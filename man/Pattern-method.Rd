@@ -3,7 +3,7 @@
 \docType{methods}
 \name{show,Pattern-method}
 \alias{show,Pattern-method}
-\title{Shows a \code{Pattern} Object}
+\title{Shows a \code{Pattern} object}
 \usage{
 \S4method{show}{Pattern}(object)
 }
@@ -11,12 +11,12 @@
 \item{object}{An instance of the \code{Pattern}-class}
 }
 \description{
-Shows a \code{Pattern} Object
+Shows a \code{Pattern} object
 }
 \section{Methods}{
  \describe{
 
-\item{list("signature(object = \"MarkovChain\")")}{ Shows a \code{Pattern} object. } }
+\item{list("signature(object = \"Pattern\")")}{ Shows a \code{Pattern} object. } }
 }
 
 \author{

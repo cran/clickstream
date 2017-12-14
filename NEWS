@@ -1,3 +1,15 @@
+14-12-2017
+Version 1.3.0
+Fixed
+- Typo in method fitMarkovChain (thanks to KSTseng).
+- Problem to compute absorbing probabilities in method fitMarkovChain (thanks to Theo van Kraay).
+- Problem with special characters when fitting Markov chains.
+Improved
+- It is now possible to hide transitions with a low probability in a graph plot of a MarkovChain object.
+New
+- Methods for consensus clustering.
+- Method for performing a chi-square test.
+
 18-05-2017
 Version 1.2.1
 New
