@@ -15,15 +15,8 @@
 #'           "User2,i,c,i,c,c,c,d",
 #'           "User4,c,c,c,c,d")
 #' 
-#' csf <- tempfile()
-#' writeLines(training, csf)
-#' trainingCLS <- readClickstreams(csf, header = TRUE)
-#' unlink(csf)
-#' 
-#' csf <- tempfile()
-#' writeLines(test, csf)
-#' testCLS <- readClickstreams(csf, header = TRUE)
-#' unlink(csf)
+#' trainingCLS <- as.clickstreams(training, header = TRUE)
+#' testCLS <- as.clickstreams(test, header = TRUE)
 #' 
 #' clusters <- clusterClickstreams(trainingCLS, centers = 2)
 #' markovchains <- fitMarkovChains(clusters, order = 1)
@@ -57,15 +50,8 @@ fitMarkovChains = function(clusters, order=1) {
 #'           "User2,i,c,i,c,c,c,d",
 #'           "User4,c,c,c,c,d")
 #' 
-#' csf <- tempfile()
-#' writeLines(training, csf)
-#' trainingCLS <- readClickstreams(csf, header = TRUE)
-#' unlink(csf)
-#' 
-#' csf <- tempfile()
-#' writeLines(test, csf)
-#' testCLS <- readClickstreams(csf, header = TRUE)
-#' unlink(csf)
+#' trainingCLS <- as.clickstreams(training, header = TRUE)
+#' testCLS <- as.clickstreams(test, header = TRUE)
 #' 
 #' clusters <- clusterClickstreams(trainingCLS, centers = 2)
 #' markovchains <- fitMarkovChains(clusters, order = 1)
@@ -108,15 +94,8 @@ getOptimalMarkovChain =function(startPattern, markovchains, clusters) {
 #'     "User3,h,i,c,i,c,p,c,c,p,c,c,i,d"
 #' )
 #' 
-#' csf <- tempfile()
-#' writeLines(training, csf)
-#' trainingCLS <- readClickstreams(csf, header = TRUE)
-#' unlink(csf)
-#' 
-#' csf <- tempfile()
-#' writeLines(test, csf)
-#' testCLS <- readClickstreams(csf, header = TRUE)
-#' unlink(csf)
+#' trainingCLS <- as.clickstreams(training, header = TRUE)
+#' testCLS <- as.clickstreams(test, header = TRUE)
 #' 
 #' clusters <- getConsensusClusters(trainingCLS, testCLS, maxIterations=5, 
 #'                          optimalProbMean=0.40, range = 0.70, centresMin = 2, 
@@ -127,7 +106,7 @@ getOptimalMarkovChain =function(startPattern, markovchains, clusters) {
 #' mc <- getOptimalMarkovChain(startPattern, markovchains, clusters)
 #' predict(mc, startPattern)
 #' @export getConsensusClusters
-getConsensusClusters = function(trainingCLS, testCLS, maxIterations=10, optimalProbMean=0.50, range=0.30, 
+getConsensusClusters = function(trainingCLS, testCLS, maxIterations=5, optimalProbMean=0.50, range=0.30, 
                                 centresMin=2, clusterCentresRange=0, order=1, takeHighest=FALSE, verbose=FALSE){
     cls <- trainingCLS
     vec <- unlist(cls)
@@ -278,26 +257,19 @@ getConsensusClusters = function(trainingCLS, testCLS, maxIterations=10, optimalP
 #'     "User3,h,i,c,i,c,p,c,c,p,c,c,i,d"
 #' )
 #' 
-#' csf <- tempfile()
-#' writeLines(training, csf)
-#' trainingCLS <- readClickstreams(csf, header = TRUE)
-#' unlink(csf)
+#' trainingCLS <- as.clickstreams(training, header = TRUE)
+#' testCLS <- as.clickstreams(test, header = TRUE)
 #' 
-#' csf <- tempfile()
-#' writeLines(test, csf)
-#' testCLS <- readClickstreams(csf, header = TRUE)
-#' unlink(csf)
-#' 
-#' clusters <- getConsensusClustersParallel(trainingCLS, testCLS, maxIterations=5, 
+#' clusters <- getConsensusClustersParallel(trainingCLS, testCLS, maxIterations=3, 
 #'                                  optimalProbMean=0.40, range = 0.70, centresMin = 2, 
-#'                                  clusterCentresRange = 0, order = 1, cores = 2,
+#'                                  clusterCentresRange = 0, order = 1, cores = 1,
 #'                                  takeHighest = FALSE, verbose = FALSE)
 #' markovchains <- fitMarkovChains(clusters)
 #' startPattern <- new("Pattern", sequence = c("i", "h", "c", "p"))
 #' mc <- getOptimalMarkovChain(startPattern, markovchains, clusters)
 #' predict(mc, startPattern)
 #' @export getConsensusClustersParallel
-getConsensusClustersParallel = function(trainingCLS, testCLS, maxIterations=10, optimalProbMean=0.50, range=0.30, 
+getConsensusClustersParallel = function(trainingCLS, testCLS, maxIterations=5, optimalProbMean=0.50, range=0.30, 
                                         centresMin=2, clusterCentresRange=0, order=1, cores=2, takeHighest=FALSE, verbose=FALSE){
     cls <- trainingCLS
     vec <- unlist(cls)

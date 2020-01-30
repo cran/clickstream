@@ -4,8 +4,13 @@
 \alias{writeClickstreams}
 \title{Writes a List of Clickstreams to File}
 \usage{
-writeClickstreams(clickstreamList, file, header = TRUE, sep = ",",
-  quote = TRUE)
+writeClickstreams(
+  clickstreamList,
+  file,
+  header = TRUE,
+  sep = ",",
+  quote = TRUE
+)
 }
 \arguments{
 \item{clickstreamList}{The list of clickstreams to be written.}
@@ -31,11 +36,12 @@ clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
                "User4,c,c,p,c,d",
                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
                "User6,i,h,c,c,p,p,c,p,c,d")
-csf <- tempfile()
-writeLines(clickstreams, csf)
-cls <- readClickstreams(csf, header = TRUE)
+cls <- as.clickstreams(clickstreams, header = TRUE)
 clusters <- clusterClickstreams(cls, order = 0, centers = 2)
 writeClickstreams(cls, file = "clickstreams.csv", header = TRUE, sep = ",")
+
+# Remove the clickstream file
+unlink("clickstreams.csv")
 
 }
 \seealso{

@@ -4,10 +4,19 @@
 \alias{getConsensusClustersParallel}
 \title{Generates an optimal set of clusters for a clickstream based on certain constraints and with parallel computation}
 \usage{
-getConsensusClustersParallel(trainingCLS, testCLS, maxIterations = 10,
-  optimalProbMean = 0.5, range = 0.3, centresMin = 2,
-  clusterCentresRange = 0, order = 1, cores = 2, takeHighest = FALSE,
-  verbose = FALSE)
+getConsensusClustersParallel(
+  trainingCLS,
+  testCLS,
+  maxIterations = 5,
+  optimalProbMean = 0.5,
+  range = 0.3,
+  centresMin = 2,
+  clusterCentresRange = 0,
+  order = 1,
+  cores = 2,
+  takeHighest = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{trainingCLS}{Clickstream object with training data (this should be the data used to build the markov chain object).}
@@ -51,19 +60,12 @@ test <- c(
     "User3,h,i,c,i,c,p,c,c,p,c,c,i,d"
 )
 
-csf <- tempfile()
-writeLines(training, csf)
-trainingCLS <- readClickstreams(csf, header = TRUE)
-unlink(csf)
+trainingCLS <- as.clickstreams(training, header = TRUE)
+testCLS <- as.clickstreams(test, header = TRUE)
 
-csf <- tempfile()
-writeLines(test, csf)
-testCLS <- readClickstreams(csf, header = TRUE)
-unlink(csf)
-
-clusters <- getConsensusClustersParallel(trainingCLS, testCLS, maxIterations=5, 
+clusters <- getConsensusClustersParallel(trainingCLS, testCLS, maxIterations=3, 
                                  optimalProbMean=0.40, range = 0.70, centresMin = 2, 
-                                 clusterCentresRange = 0, order = 1, cores = 2,
+                                 clusterCentresRange = 0, order = 1, cores = 1,
                                  takeHighest = FALSE, verbose = FALSE)
 markovchains <- fitMarkovChains(clusters)
 startPattern <- new("Pattern", sequence = c("i", "h", "c", "p"))

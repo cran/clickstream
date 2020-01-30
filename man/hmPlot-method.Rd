@@ -6,8 +6,15 @@
 \alias{hmPlot,MarkovChain-method}
 \title{Plots a Heatmap}
 \usage{
-hmPlot(object, order = 1, absorptionProbability = FALSE, title = NA,
-  lowColor = "yellow", highColor = "red", flip = FALSE)
+hmPlot(
+  object,
+  order = 1,
+  absorptionProbability = FALSE,
+  title = NA,
+  lowColor = "yellow",
+  highColor = "red",
+  flip = FALSE
+)
 }
 \arguments{
 \item{object}{The \code{MarkovChain} for which a heatmap is
@@ -44,9 +51,7 @@ clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
                "User4,c,c,p,c,d",
                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
                "User6,i,h,c,c,p,p,c,p,c,d")
-csf <- tempfile()
-writeLines(clickstreams, csf)
-cls <- readClickstreams(csf, header = TRUE)
+cls <- as.clickstreams(clickstreams, header = TRUE)
 mc <- fitMarkovChain(cls)
 hmPlot(mc)
 

@@ -4,8 +4,13 @@
 \alias{mcEvaluateAll}
 \title{Evaluates all next page clicks in a clickstream training data set against a test data}
 \usage{
-mcEvaluateAll(mc, trainingCLS, testCLS, includeChiSquare = TRUE,
-  returnChiSquareOnly = FALSE)
+mcEvaluateAll(
+  mc,
+  trainingCLS,
+  testCLS,
+  includeChiSquare = TRUE,
+  returnChiSquareOnly = FALSE
+)
 }
 \arguments{
 \item{mc}{A markovchain object that corresponds to a list of clusters.}

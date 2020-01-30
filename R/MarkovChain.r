@@ -20,9 +20,7 @@
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' mc <- fitMarkovChain(cls)
 #' show(mc)
 #'
@@ -141,9 +139,7 @@ setMethod("transientStates", "MarkovChain",
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' mc <- fitMarkovChain(cls)
 #' startPattern <- new("Pattern", sequence = c("h", "c"))
 #' predict(mc, startPattern)
@@ -310,9 +306,7 @@ setMethod("plot", "MarkovChain",
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' mc <- fitMarkovChain(cls)
 #' startPattern <- new("Pattern", sequence = c("h", "c"))
 #' predict(mc, startPattern)
@@ -479,9 +473,7 @@ setMethod("summary", "MarkovChain",
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' mc <- fitMarkovChain(cls)
 #' print(summary(mc))
 #'
@@ -524,9 +516,7 @@ print.MarkovChainSummary = function(x, ...) {
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' mc <- fitMarkovChain(cls)
 #' hmPlot(mc)
 #'

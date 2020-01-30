@@ -4,10 +4,18 @@
 \alias{getConsensusClusters}
 \title{Generates an optimal set of clusters for a clickstream based on certain constraints}
 \usage{
-getConsensusClusters(trainingCLS, testCLS, maxIterations = 10,
-  optimalProbMean = 0.5, range = 0.3, centresMin = 2,
-  clusterCentresRange = 0, order = 1, takeHighest = FALSE,
-  verbose = FALSE)
+getConsensusClusters(
+  trainingCLS,
+  testCLS,
+  maxIterations = 5,
+  optimalProbMean = 0.5,
+  range = 0.3,
+  centresMin = 2,
+  clusterCentresRange = 0,
+  order = 1,
+  takeHighest = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{trainingCLS}{Clickstream object with training data (this should be the data used to build the markov chain object).}
@@ -49,15 +57,8 @@ test <- c(
     "User3,h,i,c,i,c,p,c,c,p,c,c,i,d"
 )
 
-csf <- tempfile()
-writeLines(training, csf)
-trainingCLS <- readClickstreams(csf, header = TRUE)
-unlink(csf)
-
-csf <- tempfile()
-writeLines(test, csf)
-testCLS <- readClickstreams(csf, header = TRUE)
-unlink(csf)
+trainingCLS <- as.clickstreams(training, header = TRUE)
+testCLS <- as.clickstreams(test, header = TRUE)
 
 clusters <- getConsensusClusters(trainingCLS, testCLS, maxIterations=5, 
                          optimalProbMean=0.40, range = 0.70, centresMin = 2, 

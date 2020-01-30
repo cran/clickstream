@@ -25,15 +25,8 @@ test <- c("User1,h,c,c,p,p,h,c,p,p,c,p,p,o",
           "User2,i,c,i,c,c,c,d",
           "User4,c,c,c,c,d")
 
-csf <- tempfile()
-writeLines(training, csf)
-trainingCLS <- readClickstreams(csf, header = TRUE)
-unlink(csf)
-
-csf <- tempfile()
-writeLines(test, csf)
-testCLS <- readClickstreams(csf, header = TRUE)
-unlink(csf)
+trainingCLS <- as.clickstreams(training, header = TRUE)
+testCLS <- as.clickstreams(test, header = TRUE)
 
 clusters <- clusterClickstreams(trainingCLS, centers = 2)
 markovchains <- fitMarkovChains(clusters, order = 1)

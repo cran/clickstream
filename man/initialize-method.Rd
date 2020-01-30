@@ -5,8 +5,7 @@
 \alias{initialize,Pattern-method}
 \title{Creates a new \code{Pattern} object}
 \usage{
-\S4method{initialize}{Pattern}(.Object, sequence, probability,
-  absorbingProbabilities, ...)
+\S4method{initialize}{Pattern}(.Object, sequence, probability, absorbingProbabilities, ...)
 }
 \arguments{
 \item{.Object}{Pattern (name of the class)}

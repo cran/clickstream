@@ -4,8 +4,13 @@
 \alias{randomClickstreams}
 \title{Generates a List of Clickstreams}
 \usage{
-randomClickstreams(states, startProbabilities, transitionMatrix, meanLength,
-  n = 100)
+randomClickstreams(
+  states,
+  startProbabilities,
+  transitionMatrix,
+  meanLength,
+  n = 100
+)
 }
 \arguments{
 \item{states}{Names of all possible states.}

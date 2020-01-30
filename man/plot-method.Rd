@@ -5,8 +5,7 @@
 \alias{plot,MarkovChain-method}
 \title{Plots a \code{MarkovChain} object}
 \usage{
-\S4method{plot}{MarkovChain}(x, order = 1, digits = 2, minProbability = 0,
-  ...)
+\S4method{plot}{MarkovChain}(x, order = 1, digits = 2, minProbability = 0, ...)
 }
 \arguments{
 \item{x}{An instance of the \code{MarkovChain}-class}

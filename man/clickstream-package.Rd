@@ -11,7 +11,7 @@ model clickstreams as zero-order, first-order or higher-order Markov chains.
 }
 \details{
 \tabular{ll}{ Package: \tab clickstream\cr Type: \tab Package\cr Version:
-\tab 1.3.0\cr Date: \tab 2017-12-15\cr License: \tab GPL-2\cr Depends: \tab
+\tab 1.3.1\cr Date: \tab 2020-01-07\cr License: \tab GPL-2\cr Depends: \tab
 R (>= 3.0), methods\cr }
 }
 \examples{
@@ -23,9 +23,7 @@ clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
                "User4,c,c,p,c,d",
                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
                "User6,i,h,c,c,p,p,c,p,c,d")
-csf <- tempfile()
-writeLines(clickstreams, csf)
-cls <- readClickstreams(csf, header = TRUE)
+cls <- as.clickstreams(clickstreams, header = TRUE)
 mc <- fitMarkovChain(cls)
 startPattern <- new("Pattern", sequence = c("h", "c"))
 predict(mc, startPattern)

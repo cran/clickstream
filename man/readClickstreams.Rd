@@ -36,6 +36,7 @@ clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
 csf <- tempfile()
 writeLines(clickstreams, csf)
 cls <- readClickstreams(csf, header = TRUE)
+unlink(csf)
 print(cls)
 
 }

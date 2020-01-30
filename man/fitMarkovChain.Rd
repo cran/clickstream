@@ -4,8 +4,7 @@
 \alias{fitMarkovChain}
 \title{Fits a List of Clickstreams to a Markov Chain}
 \usage{
-fitMarkovChain(clickstreamList, order = 1, verbose = TRUE,
-  control = list())
+fitMarkovChain(clickstreamList, order = 1, verbose = TRUE, control = list())
 }
 \arguments{
 \item{clickstreamList}{A list of clickstreams for which a Markov chain is
@@ -57,9 +56,7 @@ clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
                "User4,c,c,p,c,d",
                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
                "User6,i,h,c,c,p,p,c,p,c,d")
-csf <- tempfile()
-writeLines(clickstreams, csf)
-cls <- readClickstreams(csf, header = TRUE)
+cls <- as.clickstreams(clickstreams, header = TRUE)
 mc <- fitMarkovChain(cls)
 show(mc)
 

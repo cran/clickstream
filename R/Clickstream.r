@@ -26,6 +26,7 @@
 #' csf <- tempfile()
 #' writeLines(clickstreams, csf)
 #' cls <- readClickstreams(csf, header = TRUE)
+#' unlink(csf)
 #' print(cls)
 #'
 #' @export readClickstreams
@@ -40,6 +41,87 @@ readClickstreams = function(file, sep = ",", header = FALSE) {
         nams = dat[, 1]
         dat = dat[,-1]
     }
+    
+    dat2 = as.data.frame(gsub("[^[:alnum:]]", "", as.matrix(dat)))
+    colnames(dat2) = colnames(dat)
+    rownames(dat2) = rownames(dat)
+    rm(dat)
+    ddat = data.table(dat2)
+    len = length(dat2[,1])
+    rm(dat2)
+    ldat = as.list(as.data.frame(t(ddat)))
+    ldat = llply(
+        .data = ldat, .fun = function(x)
+            as.character(x[x != "" & !is.na(x)])
+    )
+    if (header) {
+        names(ldat) = nams
+        rm(nams)
+    } else {
+        names(ldat) = seq(1, len, 1)
+    }
+    class(ldat) = "Clickstreams"
+    return(ldat)
+}
+
+.listEntryToVector = function(entry, count) {
+    blankCount = count - length(entry)
+    blanks = rep("", blankCount)
+    return(c(entry, blanks))
+}
+
+#' Converts a character vector or a character list into a clickstream list.
+#'
+#' Converts a character vector or a character list into a clickstream list. Note that non-alphanumeric characters will be removed.
+#'
+#'
+#' @param obj The character vector or character list which will be converted into a clickstream list.
+#' Each line of the vector must represent exactly one click stream.
+#' @param sep The character separating clicks (default is \dQuote{,}).
+#' @param header A logical flag indicating whether the first entry of each entry
+#' in the character vector is the name of the clickstream.
+#' @return A list of clickstreams. Each element is a vector of characters
+#' representing the clicks. The name of each list element is either extracted from the
+#' character vector or a unique number.
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link{print.Clickstreams}}, \code{\link{randomClickstreams}}
+#' @examples
+#'
+#' clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#'                "User2,i,c,i,c,c,c,d",
+#'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
+#'                "User4,c,c,p,c,d",
+#'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
+#'                "User6,i,h,c,c,p,p,c,p,c,d")
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
+#' print(cls)
+#'
+#' @export as.clickstreams
+as.clickstreams = function(obj, sep = ",", header = TRUE) {
+    if (is.list(obj)) {
+        if (length(obj) == 0) {
+            stop("Variable obj must include elements.")
+        } else if (!is.character(obj[[1]])) {
+            stop("Variable obj is not in correct format.")
+        }
+    } else if (is.vector(obj)) {
+        if (length(obj) == 0) {
+            stop("Variable obj must include elements.")
+        } else if (!is.character(obj)) {
+            stop("Variable obj is not in correct format.")
+        }
+    } else {
+        stop("Variable obj is not in correct format.")
+    }
+    dat = sapply(obj, FUN = function(x) return(unlist(strsplit(x, split = sep))))
+    nams = sapply(dat, FUN = function(x) return(x[1]))
+    dat = sapply(dat, FUN = function(x) return(x[-1]))
+    
+    cols = max(lengths(dat))
+    
+    df = as.data.frame(t(sapply(dat, FUN = .listEntryToVector, cols)))
+    row.names(df) = nams
+    dat = as.data.table(df)
     
     dat2 = as.data.frame(gsub("[^[:alnum:]]", "", as.matrix(dat)))
     colnames(dat2) = colnames(dat)
@@ -97,11 +179,12 @@ readClickstreams = function(file, sep = ",", header = FALSE) {
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' clusters <- clusterClickstreams(cls, order = 0, centers = 2)
 #' writeClickstreams(cls, file = "clickstreams.csv", header = TRUE, sep = ",")
+#' 
+#' # Remove the clickstream file
+#' unlink("clickstreams.csv")
 #'
 #' @export writeClickstreams
 writeClickstreams = function(clickstreamList, file, header = TRUE, sep =
@@ -235,9 +318,7 @@ randomClickstreams = function(states, startProbabilities, transitionMatrix, mean
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' summary(cls)
 #'
 #' @export 
@@ -268,9 +349,7 @@ summary.Clickstreams = function(object, ...) {
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' print(cls)
 #'
 #' @export 
@@ -304,9 +383,7 @@ print.Clickstreams = function(x, ...) {
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' clusters <- clusterClickstreams(cls, order = 0, centers = 2)
 #' print(clusters)
 #'
@@ -339,9 +416,7 @@ print.ClickstreamClusters = function(x, ...) {
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' clusters <- clusterClickstreams(cls, order = 0, centers = 2)
 #' summary(clusters)
 #'
@@ -396,9 +471,7 @@ summary.ClickstreamClusters = function(object, ...) {
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' clusters <- clusterClickstreams(cls, order = 0, centers = 2)
 #' pattern <- new("Pattern", sequence = c("h", "c"))
 #' predict(clusters, pattern)
@@ -439,9 +512,7 @@ predict.ClickstreamClusters = function(object, pattern, ...) {
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' frequencyDF <- frequencies(cls)
 #'
 #' @export frequencies
@@ -468,7 +539,7 @@ frequencies = function(clickstreamList) {
 #'
 #'
 #' @param clickstreamList A list of clickstreams.
-#' @return An instance of the class \code{\link[arules]{transactions}}
+#' @return An instance of the old class \code{\link[arules]{transactions}}
 #' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
 #' @seealso \code{\link{frequencies}}
 #' @examples
@@ -479,13 +550,11 @@ frequencies = function(clickstreamList) {
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
-#' trans <- as.transactions(cls)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
+#' trans <- as.moltenTransactions(cls)
 #'
-#' @export as.transactions
-as.transactions = function(clickstreamList) {
+#' @export as.moltenTransactions
+as.moltenTransactions = function(clickstreamList) {
     transactionID = unlist(lapply(
         seq(1, length(clickstreamList), 1),
         FUN = function(x)
@@ -508,6 +577,33 @@ as.transactions = function(clickstreamList) {
 }
 
 
+#' Coerces a Clickstream Object to a Transactions Object
+#'
+#' Coerces a \code{Clickstream} object to a \code{transactions} object.
+#'
+#'
+#' @param clickstreamList A list of clickstreams.
+#' @return An instance of the class \code{\link[arules]{transactions}}
+#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @seealso \code{\link{frequencies}}
+#' @examples
+#'
+#' clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
+#'                "User2,i,c,i,c,c,c,d",
+#'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
+#'                "User4,c,c,p,c,d",
+#'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
+#'                "User6,i,h,c,c,p,p,c,p,c,d")
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
+#' trans <- as.transactions(cls)
+#'
+#' @export as.transactions
+as.transactions = function(clickstreamList) {
+    tr = as(unclass(clickstreamList), "transactions")
+    return(tr)
+}
+
+
 #' Coerces a Clickstream Object to a ClickClust Object
 #'
 #' Coerces a \code{Clickstream} object to a \code{ClickClust} object.
@@ -525,9 +621,7 @@ as.transactions = function(clickstreamList) {
 #'                "User4,c,c,p,c,d",
 #'                "User5,h,c,c,p,p,c,p,p,p,i,p,o",
 #'                "User6,i,h,c,c,p,p,c,p,c,d")
-#' csf <- tempfile()
-#' writeLines(clickstreams, csf)
-#' cls <- readClickstreams(csf, header = TRUE)
+#' cls <- as.clickstreams(clickstreams, header = TRUE)
 #' X <- as.ClickClust(cls)
 #'
 #' @export as.ClickClust
