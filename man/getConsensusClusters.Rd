@@ -2,7 +2,7 @@
 % Please edit documentation in R/ClusterOptimization.r
 \name{getConsensusClusters}
 \alias{getConsensusClusters}
-\title{Generates an optimal set of clusters for a clickstream based on certain constraints}
+\title{Generates an optimal set of clusters for a clickstream object based on consensus clustering.}
 \usage{
 getConsensusClusters(
   trainingCLS,
@@ -34,7 +34,7 @@ getConsensusClusters(
 
 \item{order}{The order for markov chains that will be used to evaluate each cluster.}
 
-\item{takeHighest}{determines whether to default to the highest mean next click probability, or error if the target is not reached after the given number of k-means iterations.}
+\item{takeHighest}{Determines whether to default to the highest mean next click probability, or error if the target is not reached after the given number of k-means iterations.}
 
 \item{verbose}{Should this function report extra information on progress?}
 }

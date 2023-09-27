@@ -2,7 +2,7 @@
 % Please edit documentation in R/ClusterOptimization.r
 \name{getConsensusClustersParallel}
 \alias{getConsensusClustersParallel}
-\title{Generates an optimal set of clusters for a clickstream based on certain constraints and with parallel computation}
+\title{Generates an optimal set of clusters for a clickstream based on consensus clustering and with parallel computation}
 \usage{
 getConsensusClustersParallel(
   trainingCLS,
@@ -37,7 +37,7 @@ getConsensusClustersParallel(
 
 \item{cores}{Number of cores used for clustering.}
 
-\item{takeHighest}{determines whether to default to the highest mean next click probability, or error if the target is not reached after the given number of k-means iterations.}
+\item{takeHighest}{Determines whether to default to the highest mean next click probability, or error if the target is not reached after the given number of k-means iterations.}
 
 \item{verbose}{Should this function report extra information on progress?}
 }

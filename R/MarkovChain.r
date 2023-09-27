@@ -5,7 +5,7 @@
 #' @docType class
 #' @section Objects from the Class: Objects can be created by calls of the form
 #' \code{new("MarkovChain", ...)}. This S4 class describes \code{MarkovChain} objects.
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{fitMarkovChain}}
 #' @keywords classes
 #' @examples
@@ -52,7 +52,7 @@ setClass(
 #' @section Methods: \describe{
 #'
 #' \item{list("signature(object = \"MarkovChain\")")}{ Returns the name of all states of a \code{MarkovChain} object. } }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @keywords methods
 setGeneric("states", function(object)
     standardGeneric("states"))
@@ -72,7 +72,7 @@ setMethod("states", "MarkovChain",
 #'
 #' \item{list("signature(object = \"MarkovChain\")")}{ Returns the names of all states that never have a successor
 #' in a clickstream (i.e. that are absorbing).} }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @keywords methods
 setGeneric("absorbingStates", function(object)
     standardGeneric("absorbingStates"))
@@ -92,7 +92,7 @@ setMethod("absorbingStates", "MarkovChain",
 #'
 #' \item{list("signature(object = \"MarkovChain\")")}{ Returns the names of all states that have a non-zero
 #' probability that a user will never return to them (i.e. that are transient). } }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @keywords methods
 setGeneric("transientStates", function(object)
     standardGeneric("transientStates"))
@@ -127,7 +127,7 @@ setMethod("transientStates", "MarkovChain",
 #' \eqn{X^n}. The transition matrix for lag \eqn{i} is given as \eqn{Q_i}.
 #' \eqn{\lambda_i} specifies the lag parameter and \eqn{B} the absorbing
 #' probability matrix. } }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{fitMarkovChain}}
 #' @keywords methods
 #' @examples
@@ -260,7 +260,7 @@ setMethod("predict", "MarkovChain",
 #' @param ... Further parameters for the \code{plot}-function in package \code{igraph}
 #' @section Methods: \describe{
 #' \item{list("signature(x = \"MarkovChain\", order = \"numeric\", digits = \"numeric\")")}{ Plots the transition matrix with order \code{order} of a \code{MarkovChain} object as graph. } }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @keywords methods
 setMethod("plot", "MarkovChain",
           function(x, order = 1, digits = 2, minProbability = 0, ...) {
@@ -294,7 +294,7 @@ setMethod("plot", "MarkovChain",
 #'
 #' \item{list("signature(object = \"MarkovChain\")")}{ Generates a sequence of clicks by randomly walking through
 #' the transition graph of a given \code{MarkovChain} object. } }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{fitMarkovChain}}
 #' @keywords methods
 #' @examples
@@ -365,7 +365,7 @@ setMethod("randomClicks", "MarkovChain",
 #' @param object An instance of the \code{MarkovChain}-class
 #' @section Methods: \describe{
 #' \item{list("signature(object = \"MarkovChain\")")}{ Shows an \code{MarkovChain} object. } }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @keywords methods
 setMethod("show", "MarkovChain", function(object) {
     if (object@order == 0) {
@@ -415,7 +415,7 @@ setMethod("show", "MarkovChain", function(object) {
 #' @section Methods: \describe{
 #'
 #' \item{list("signature(object = \"MarkovChain\")")}{ Generates a summary for a given \code{MarkovChain} object } }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @keywords methods
 setMethod("summary", "MarkovChain",
           function(object) {
@@ -463,7 +463,7 @@ setMethod("summary", "MarkovChain",
 #' the function \code{\link[=MarkovChain-class]{summary}}
 #' @param ...  Ignored parameters.
 #' @method print MarkovChainSummary
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link[=MarkovChain-class]{summary}}
 #' @examples
 #'
@@ -504,12 +504,12 @@ print.MarkovChainSummary = function(x, ...) {
 #'
 #' \item{list("signature(object = \"MarkovChain\")")}{ Plots a heatmap for a specified transition matrix or
 #' the absorption probability matrix of a given \code{MarkovChain} object. } }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{fitMarkovChain}}
 #' @keywords methods
 #' @examples
 #'
-#' # fitting a simple Markov chain and predicting the next click
+#' # fitting a simple Markov chain and plotting a heat map
 #' clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
 #'                "User2,i,c,i,c,c,c,d",
 #'                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",

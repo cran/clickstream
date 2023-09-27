@@ -64,7 +64,7 @@ getOptimalMarkovChain =function(startPattern, markovchains, clusters) {
     return(optimalPreComputedChain)
 }
 
-#' Generates an optimal set of clusters for a clickstream based on certain constraints
+#' Generates an optimal set of clusters for a clickstream object based on consensus clustering.
 #'
 #' @description This is an experimental function for a consensus clustering algorithm based on targeting a range of average next state probabilities derived when fitting each cluster to a markov chain. 
 #' @param trainingCLS Clickstream object with training data (this should be the data used to build the markov chain object).
@@ -75,7 +75,7 @@ getOptimalMarkovChain =function(startPattern, markovchains, clusters) {
 #' @param centresMin The minimum cluster centres to evaluate.
 #' @param clusterCentresRange the additional cluster centres to evaluate.
 #' @param order The order for markov chains that will be used to evaluate each cluster.
-#' @param takeHighest determines whether to default to the highest mean next click probability, or error if the target is not reached after the given number of k-means iterations. 
+#' @param takeHighest Determines whether to default to the highest mean next click probability, or error if the target is not reached after the given number of k-means iterations. 
 #' @param verbose Should this function report extra information on progress?
 #' @author Theo van Kraay \email{theo.vankraay@@hotmail.com}
 #' @examples
@@ -226,7 +226,7 @@ getConsensusClusters = function(trainingCLS, testCLS, maxIterations=5, optimalPr
     return (setOfClusterSets)
 }
 
-#' Generates an optimal set of clusters for a clickstream based on certain constraints and with parallel computation
+#' Generates an optimal set of clusters for a clickstream based on consensus clustering and with parallel computation
 #' 
 #' @description This is an experimental function for a consensus clustering algorithm based on targeting a range of average next state probabilities derived when fitting each cluster to a markov chain. This function parallelizes k-means and fitToMarkovChain operations across computer cores, and depends on the parallel package to function.
 #' @param trainingCLS Clickstream object with training data (this should be the data used to build the markov chain object).
@@ -238,7 +238,7 @@ getConsensusClusters = function(trainingCLS, testCLS, maxIterations=5, optimalPr
 #' @param clusterCentresRange the additional cluster centres to evaluate.
 #' @param order The order for markov chains that will be used to evaluate each cluster.
 #' @param cores Number of cores used for clustering.
-#' @param takeHighest determines whether to default to the highest mean next click probability, or error if the target is not reached after the given number of k-means iterations. 
+#' @param takeHighest Determines whether to default to the highest mean next click probability, or error if the target is not reached after the given number of k-means iterations. 
 #' @param verbose Should this function report extra information on progress?
 #' @author Theo van Kraay \email{theo.vankraay@@hotmail.com}
 #' @examples

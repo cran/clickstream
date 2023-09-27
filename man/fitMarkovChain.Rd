@@ -71,5 +71,5 @@ Applications}, 2nd edition, Springer, 2013.
 \code{\link[=Rsolnp]{Rsolnp}}
 }
 \author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
+Michael Scholz \email{michael.scholz@th-deg.de}
 }

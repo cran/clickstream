@@ -22,6 +22,6 @@ probability that a user will never return to them (i.e. that are transient). } }
 }
 
 \author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
+Michael Scholz \email{michael.scholz@th-deg.de}
 }
 \keyword{methods}

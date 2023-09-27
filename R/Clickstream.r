@@ -13,7 +13,7 @@
 #' @return A list of clickstreams. Each element is a vector of characters
 #' representing the clicks. The name of each list element is either the header
 #' of a clickstream file or a unique number.
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{print.Clickstreams}}, \code{\link{randomClickstreams}}
 #' @examples
 #'
@@ -70,6 +70,11 @@ readClickstreams = function(file, sep = ",", header = FALSE) {
     return(c(entry, blanks))
 }
 
+.isEqualLength = function(obj) {
+    equal = ifelse(length(unique(lengths(strsplit(obj, ",")))) == 1, T, F)
+    return(equal)
+}
+
 #' Converts a character vector or a character list into a clickstream list.
 #'
 #' Converts a character vector or a character list into a clickstream list. Note that non-alphanumeric characters will be removed.
@@ -83,7 +88,7 @@ readClickstreams = function(file, sep = ",", header = FALSE) {
 #' @return A list of clickstreams. Each element is a vector of characters
 #' representing the clicks. The name of each list element is either extracted from the
 #' character vector or a unique number.
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{print.Clickstreams}}, \code{\link{randomClickstreams}}
 #' @examples
 #'
@@ -113,9 +118,25 @@ as.clickstreams = function(obj, sep = ",", header = TRUE) {
     } else {
         stop("Variable obj is not in correct format.")
     }
-    dat = sapply(obj, FUN = function(x) return(unlist(strsplit(x, split = sep))))
-    nams = sapply(dat, FUN = function(x) return(x[1]))
-    dat = sapply(dat, FUN = function(x) return(x[-1]))
+    if (.isEqualLength(obj)) {
+        dat = as.list(as.data.frame(sapply(obj, FUN = function(x) return(unlist(strsplit(x, split = sep))))))
+        if (header) {
+            nams = sapply(dat, FUN = function(x) return(x[1]))
+            dat = as.list(as.data.frame(sapply(dat, FUN = function(x) return(x[-1]))))
+        } else {
+            nams = seq(1, length(obj), 1)
+            dat = as.list(as.data.frame(sapply(dat, FUN = function(x) return(x))))
+        }
+    } else {
+        dat = sapply(obj, FUN = function(x) return(unlist(strsplit(x, split = sep))))
+        if (header) {
+            nams = sapply(dat, FUN = function(x) return(x[1]))
+            dat = sapply(dat, FUN = function(x) return(x[-1]))
+        } else {
+            nams = seq(1, length(obj), 1)
+            dat = sapply(dat, FUN = function(x) return(x))
+        }
+    }
     
     cols = max(lengths(dat))
     
@@ -169,7 +190,7 @@ as.clickstreams = function(obj, sep = ",", header = TRUE) {
 #' element should be used as first element.
 #' @param quote A logical flag indicating whether each element of a clickstream
 #' will be surrounded by double quotes (default is \code{TRUE}.
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{readClickstreams}}, \code{\link{clusterClickstreams}}
 #' @examples
 #'
@@ -239,7 +260,7 @@ writeClickstreams = function(clickstreamList, file, header = TRUE, sep =
 #' @param meanLength Average length of the click streams.
 #' @param n Number of click streams to be generated.
 #' @return Returns a list of clickstreams.
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{fitMarkovChain}}, \code{\link{readClickstreams}},
 #' \code{\link{print.Clickstreams}}
 #' @examples
@@ -308,7 +329,7 @@ randomClickstreams = function(states, startProbabilities, transitionMatrix, mean
 #' @param object A \code{Clickstreams} object (see \code{\link{readClickstreams}}).
 #' @param ...  Ignored parameters.
 #' @method summary Clickstreams
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{readClickstreams}}, \code{\link{randomClickstreams}}
 #' @examples
 #'
@@ -339,7 +360,7 @@ summary.Clickstreams = function(object, ...) {
 #' @param x A list of clickstreams.
 #' @param ...  Ignored parameters.
 #' @method print Clickstreams
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{readClickstreams}}, \code{\link{randomClickstreams}}
 #' @examples
 #'
@@ -372,7 +393,7 @@ print.Clickstreams = function(x, ...) {
 #' @param x A \code{ClickstreamClusters} object (see \code{\link{clusterClickstreams}}).
 #' @param ...  Ignored parameters.
 #' @method print ClickstreamClusters
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{clusterClickstreams}},
 #' \code{\link{summary.ClickstreamClusters}}
 #' @examples
@@ -405,7 +426,7 @@ print.ClickstreamClusters = function(x, ...) {
 #' \code{\link{clusterClickstreams}}.
 #' @param ...  Ignored parameters.
 #' @method summary ClickstreamClusters
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{clusterClickstreams}},
 #' \code{\link{print.ClickstreamClusters}}
 #' @examples
@@ -460,7 +481,7 @@ summary.ClickstreamClusters = function(object, ...) {
 #' @method predict ClickstreamClusters
 #' @return Returns the index of the clusters to which the given \code{Pattern}
 #' object most probably belongs to.
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{clusterClickstreams}},
 #' \code{\link{print.ClickstreamClusters}}
 #' @examples
@@ -502,7 +523,7 @@ predict.ClickstreamClusters = function(object, pattern, ...) {
 #'
 #' @param clickstreamList A list of clickstreams.
 #' @return A data frame containing state frequencies for each clickstream.
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{transactions}}
 #' @examples
 #'
@@ -540,7 +561,7 @@ frequencies = function(clickstreamList) {
 #'
 #' @param clickstreamList A list of clickstreams.
 #' @return An instance of the old class \code{\link[arules]{transactions}}
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{frequencies}}
 #' @examples
 #'
@@ -584,7 +605,7 @@ as.moltenTransactions = function(clickstreamList) {
 #'
 #' @param clickstreamList A list of clickstreams.
 #' @return An instance of the class \code{\link[arules]{transactions}}
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{frequencies}}
 #' @examples
 #'
@@ -611,7 +632,7 @@ as.transactions = function(clickstreamList) {
 #'
 #' @param clickstreamList A list of clickstreams.
 #' @return A list consisting of a dataset X and a vector of initial states y
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{frequencies}}
 #' @examples
 #'

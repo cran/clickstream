@@ -60,7 +60,7 @@
 #' sum of squares, one component per cluster.  } \item{tot.withinss}{ Total within-cluster sum of
 #' squares, i.e., \code{sum(withinss)}.  } \item{betweenss}{ The
 #' between-cluster sum of squares, i.e., \code{totss - tot.withinss}.  }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{print.ClickstreamClusters}},
 #' \code{\link{summary.ClickstreamClusters}}
 #' @examples
@@ -212,7 +212,7 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
 #' @return Returns a \code{MarkovChain} object.
 #' @note At least half of the clickstreams need to consist of as many clicks as
 #' the order of the Markov chain that should be fitted.
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link[=MarkovChain-class]{MarkovChain}},
 #' \code{\link[=Rsolnp]{Rsolnp}}
 #' @references This method implements the parameter estimation method presented

@@ -31,5 +31,5 @@ frequencyDF <- frequencies(cls)
 \code{\link{transactions}}
 }
 \author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
+Michael Scholz \email{michael.scholz@th-deg.de}
 }

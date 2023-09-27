@@ -5,7 +5,7 @@
 #' @docType class
 #' @section Objects from the Class: Objects can be created by calls of the form
 #' \code{new("EvaluationResult", ...)}. This S4 class describes \code{EvaluationResult} objects.
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link{mcEvaluate}}
 #' @keywords classes
 #' @examples
@@ -37,7 +37,7 @@ setClass(
 #' @param object An instance of the \code{EvaluationResult}-class
 #' @section Methods: \describe{
 #' \item{list("signature(object = \"EvaluationResult\")")}{ Shows an \code{EvaluationResult} object. } }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @keywords methods
 setMethod("show", "EvaluationResult",
           function(object) {

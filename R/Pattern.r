@@ -10,7 +10,7 @@
 #' @section Objects from the Class: Objects can be created by calls of the form
 #' \code{new("Pattern", sequence, probability, ...)}. This S4 class describes a click pattern consisting of a sequence of clicks
 #' and a probability of occurrence.
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link[=MarkovChain-class]{randomClicks}}
 #' @keywords classes
 #' @examples
@@ -48,7 +48,7 @@ setClass(
 #' @section Methods: \describe{
 #' \item{list("signature(sequence = \"character\", probability = \"numeric\", absorbingProbabilities = \"numeric"))}{Creates a new \code{Pattern} object.}
 #' }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @keywords methods
 setMethod("initialize",
           signature(.Object = "Pattern"),
@@ -72,7 +72,7 @@ setMethod("initialize",
 #' @section Methods: \describe{
 #'
 #' \item{list("signature(object = \"Pattern\")")}{ Shows a \code{Pattern} object. } }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @keywords methods
 setMethod("show", "Pattern",
           function(object) {
@@ -97,7 +97,7 @@ setMethod("show", "Pattern",
 #' @section Methods: \describe{
 #' \item{list("signature(e1 = \"Pattern\", e2 = \"Pattern\")")}{Concatenates two \code{Pattern} objects.}
 #' }
-#' @author Michael Scholz \email{michael.scholz@@uni-passau.de}
+#' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @keywords methods
 setMethod("+", c("Pattern", "Pattern"),
           function(e1, e2) {

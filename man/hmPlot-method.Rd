@@ -44,7 +44,7 @@ the absorption probability matrix of a given \code{MarkovChain} object. } }
 
 \examples{
 
-# fitting a simple Markov chain and predicting the next click
+# fitting a simple Markov chain and plotting a heat map
 clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",
                "User2,i,c,i,c,c,c,d",
                "User3,h,i,c,i,c,p,c,c,p,c,c,i,d",
@@ -60,6 +60,6 @@ hmPlot(mc)
 \code{\link{fitMarkovChain}}
 }
 \author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
+Michael Scholz \email{michael.scholz@th-deg.de}
 }
 \keyword{methods}

@@ -48,5 +48,5 @@ unlink("clickstreams.csv")
 \code{\link{readClickstreams}}, \code{\link{clusterClickstreams}}
 }
 \author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
+Michael Scholz \email{michael.scholz@th-deg.de}
 }

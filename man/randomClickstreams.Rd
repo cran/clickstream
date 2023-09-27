@@ -45,5 +45,5 @@ print(cls)
 \code{\link{print.Clickstreams}}
 }
 \author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
+Michael Scholz \email{michael.scholz@th-deg.de}
 }

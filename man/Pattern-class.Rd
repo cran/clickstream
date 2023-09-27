@@ -29,6 +29,6 @@ pattern3 <- new("Pattern", sequence = c("h", "p", "p"), probability = 0.35,
 \code{\link[=MarkovChain-class]{randomClicks}}
 }
 \author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
+Michael Scholz \email{michael.scholz@th-deg.de}
 }
 \keyword{classes}

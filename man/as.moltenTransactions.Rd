@@ -31,5 +31,5 @@ trans <- as.moltenTransactions(cls)
 \code{\link{frequencies}}
 }
 \author{
-Michael Scholz \email{michael.scholz@uni-passau.de}
+Michael Scholz \email{michael.scholz@th-deg.de}
 }
