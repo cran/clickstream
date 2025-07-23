@@ -194,7 +194,7 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
 #' 
 #' For solving the quadratic programming problem of higher-order Markov chains,
 #' an augmented Lagrange multiplier method from the package
-#' \code{\link{Rsolnp}} is used.
+#' \code{\link[Rsolnp:solnp]{Rsolnp::solnp()}} is used.
 #' 
 #' @param clickstreamList A list of clickstreams for which a Markov chain is
 #' fitted.
@@ -214,7 +214,7 @@ clusterClickstreams=function(clickstreamList, order=0, centers, ...) {
 #' the order of the Markov chain that should be fitted.
 #' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @seealso \code{\link[=MarkovChain-class]{MarkovChain}},
-#' \code{\link[=Rsolnp]{Rsolnp}}
+#' \code{\link[Rsolnp:solnp]{Rsolnp::solnp()}}
 #' @references This method implements the parameter estimation method presented
 #' in Ching, W.-K. et al.: \emph{Markov Chains -- Models, Algorithms and
 #' Applications}, 2nd edition, Springer, 2013.

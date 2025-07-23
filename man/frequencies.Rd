@@ -27,9 +27,6 @@ cls <- as.clickstreams(clickstreams, header = TRUE)
 frequencyDF <- frequencies(cls)
 
 }
-\seealso{
-\code{\link{transactions}}
-}
 \author{
 Michael Scholz \email{michael.scholz@th-deg.de}
 }

@@ -524,7 +524,6 @@ predict.ClickstreamClusters = function(object, pattern, ...) {
 #' @param clickstreamList A list of clickstreams.
 #' @return A data frame containing state frequencies for each clickstream.
 #' @author Michael Scholz \email{michael.scholz@@th-deg.de}
-#' @seealso \code{\link{transactions}}
 #' @examples
 #'
 #' clickstreams <- c("User1,h,c,c,p,c,h,c,p,p,c,p,p,o",

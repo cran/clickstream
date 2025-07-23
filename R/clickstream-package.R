@@ -4,12 +4,11 @@
 #' model clickstreams as zero-order, first-order or higher-order Markov chains.
 #' 
 #' \tabular{ll}{ Package: \tab clickstream\cr Type: \tab Package\cr Version:
-#' \tab 1.3.3\cr Date: \tab 2023-09-27\cr License: \tab GPL-2\cr Depends: \tab
+#' \tab 1.3.4\cr Date: \tab 2025-07-23\cr License: \tab GPL-2\cr Depends: \tab
 #' R (>= 3.0), methods\cr }
 #' 
 #' @name clickstream-package
 #' @aliases clickstream-package clickstream
-#' @docType package
 #' @author Michael Scholz \email{michael.scholz@@th-deg.de}
 #' @author Theo van Kraay \email{theo.vankraay@@hotmail.com}
 #' @references Scholz, M. (2016) R Package clickstream: Analyzing Clickstream Data with Markov Chains, \emph{Journal of Statistical Software}, \bold{74}, 4, pages 1--17 .
@@ -23,6 +22,7 @@
 #' @importFrom data.table data.table dcast.data.table as.data.table
 #' @importFrom MASS ginv
 #' @keywords click stream Markov chain
+#' "_PACKAGE"
 #' @examples
 #' 
 #' # fitting a simple Markov chain and predicting the next click

@@ -41,7 +41,7 @@ transition matrix.
 \details{
 For solving the quadratic programming problem of higher-order Markov chains,
 an augmented Lagrange multiplier method from the package
-\code{\link{Rsolnp}} is used.
+\code{\link[Rsolnp:solnp]{Rsolnp::solnp()}} is used.
 }
 \note{
 At least half of the clickstreams need to consist of as many clicks as
@@ -68,7 +68,7 @@ Applications}, 2nd edition, Springer, 2013.
 }
 \seealso{
 \code{\link[=MarkovChain-class]{MarkovChain}},
-\code{\link[=Rsolnp]{Rsolnp}}
+\code{\link[Rsolnp:solnp]{Rsolnp::solnp()}}
 }
 \author{
 Michael Scholz \email{michael.scholz@th-deg.de}
